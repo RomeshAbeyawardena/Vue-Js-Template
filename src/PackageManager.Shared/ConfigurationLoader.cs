@@ -41,20 +41,16 @@ namespace PackageManager.Shared.Domain.Models
 
         }
 
-        private static IEnumerable<Command> GetCommands(string action, XmlNodeList commands,
+        private static IEnumerable<Command> GetCommands(string action, XmlNodeList nodes,
             IEnumerable<Command> commandList = default)
         {
             var list = commandList?.ToList() ?? new List<Command>();
 
-            foreach (XmlNode command in commands)
+            foreach (XmlNode node in nodes)
             {
-                list.Add(new Command
-                {
-                    Action = action,
-                    Enabled = command.Attributes.GetNamedItem("enabled").InnerText.TryParseBool(),
-                    Key = command.Attributes.GetNamedItem("key").InnerText,
-                    Value = command.Attributes.GetNamedItem("value")?.InnerText,
-                });
+                var command = node.GetValues<Command>();
+                command.Action = action;
+                list.Add(command);
             }
 
             return list;
@@ -72,6 +68,8 @@ namespace PackageManager.Shared.Domain.Models
             foreach (XmlNode node in outputNodes)
             {
                 var output = node.GetValues<Output>();
+                output.Files = GetFiles(node);
+                output.FileExtensions = GetFileExtensions(node);
                 output.Action = Action_Add;
                 outputList.Add(output);
             }
@@ -85,12 +83,8 @@ namespace PackageManager.Shared.Domain.Models
             var nodes = outputNode.SelectNodes(getFilesXPath);
             foreach (XmlNode node in nodes)
             {
-                fileList.Add(new File
-                {
-                    Filter = node.Attributes["filter"].Value,
-                    From = node.Attributes["from"].Value,
-                    To = node.Attributes["to"].Value
-                });
+                var file = node.GetValues<File>();
+                fileList.Add(file);
             }
 
             return fileList;
@@ -103,12 +97,8 @@ namespace PackageManager.Shared.Domain.Models
             var nodes = outputNode.SelectNodes(getFilesXPath);
             foreach (XmlNode node in nodes)
             {
-                fileList.Add(new FileExtension
-                {
-                    Enabled = node.Attributes["enabled"].Value.TryParseBool(),
-                    Value = node.Attributes["value"].Value,
-                    Type = node.Attributes["type"].Value
-                });
+                var fileExtension = node.GetValues<FileExtension>();
+                fileList.Add(fileExtension);
             }
 
             return fileList;
@@ -123,12 +113,8 @@ namespace PackageManager.Shared.Domain.Models
 
             foreach (XmlNode node in nodes)
             {
-                modules.Add(new Module
-                {
-                    Enabled = node.Attributes["enabled"].Value.TryParseBool(),
-                    AssemblyName = node.Attributes["assembly"].Value,
-                    Type = node.Attributes["type"].Value
-                });
+                var module = node.GetValues<Module>();
+                modules.Add(module);
             }
 
             configuration.Modules = modules;

@@ -15,8 +15,11 @@ namespace PackageManager.Shared.Extensions
             var valueDictionary = new Dictionary<string, object>();
             foreach (var value in values)
             {
+                var attributes = xmlNode.Attributes;
                 valueDictionary.Add(value,
-                    xmlNode.Attributes[value]?.Value);
+                    attributes[value]?.Value
+                    ?? attributes[value.ToLower()]?.Value
+                    ?? attributes[value.ToUpper()]?.Value);
             }
 
             return valueDictionary;

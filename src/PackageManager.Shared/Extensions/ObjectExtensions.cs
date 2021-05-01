@@ -21,7 +21,16 @@ namespace PackageManager.Shared.Extensions
             {
                 if(dictionary.TryGetValue(property.Name, out var value))
                 {
-                    property.SetValue(instance, value);
+                    var propertyType = property.PropertyType;
+                    if (value != null)
+                    {
+                        if (value.GetType() != propertyType)
+                        {
+                            value = Convert.ChangeType(value, propertyType);
+                        }
+
+                        property.SetValue(instance, value);
+                    }
                 }
             }
 

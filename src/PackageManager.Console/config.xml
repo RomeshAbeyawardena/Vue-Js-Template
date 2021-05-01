@@ -28,7 +28,7 @@
   </outputs>
   <consoles>
     <hosts>
-      <add enabled="true" name="PowerShell" path="Powershell" />
+      <add enabled="true" name="PowerShell" path="pwsh" />
     </hosts>
   </consoles>
   <modules>

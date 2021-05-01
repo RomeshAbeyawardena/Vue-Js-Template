@@ -34,5 +34,7 @@ namespace PackageManager.Shared
         public IEnumerable<Command> Commands { get; set; }
 
         public IEnumerable<Output> Outputs { get; set; }
+
+        public IEnumerable<IConsoleHost> ConsoleHosts { get; set; }
     }
 }
