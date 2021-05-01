@@ -22,6 +22,10 @@ namespace PackageManager.Shared.Domain.Models
 
             GetCommands(configuration, xmlDocument);
 
+            GetOutputs(configuration, xmlDocument);
+
+            GetModules(configuration, xmlDocument);
+
             return configuration;
         }
 
@@ -54,6 +58,82 @@ namespace PackageManager.Shared.Domain.Models
             }
 
             return list;
+        }
+    
+        private static void GetOutputs(IConfiguration configuration,
+            XmlDocument xmlDocument)
+        {
+            const string getOutputsXPath = "/config/outputs/{0}[@enabled='true']";
+            
+            var outputNodes = xmlDocument.SelectNodes(getOutputsXPath.Format(Action_Add));
+
+            var outputList = new List<Output>();
+            foreach (XmlNode node in outputNodes)
+            {
+                outputList.Add(new Output { 
+                    Action = Action_Add,
+                    Name = node.Attributes["name"].Value,
+                    Files = GetFiles(node),
+                    FileExtensions = GetFileExtensions(node)
+                });
+            }
+            configuration.Outputs = outputList;
+        }
+
+        private static IEnumerable<File> GetFiles(XmlNode outputNode)
+        {
+            var fileList = new List<File>();
+            const string getFilesXPath = "//add/files/paths/add";
+            var nodes = outputNode.SelectNodes(getFilesXPath);
+            foreach (XmlNode node in nodes)
+            {
+                fileList.Add(new File
+                {
+                    Filter = node.Attributes["filter"].Value,
+                    From = node.Attributes["from"].Value,
+                    To = node.Attributes["to"].Value
+                });
+            }
+
+            return fileList;
+        }
+
+        private static IEnumerable<FileExtension> GetFileExtensions(XmlNode outputNode)
+        {
+            var fileList = new List<FileExtension>();
+            const string getFilesXPath = "//add/files/extensions/add[@enabled='true']";
+            var nodes = outputNode.SelectNodes(getFilesXPath);
+            foreach (XmlNode node in nodes)
+            {
+                fileList.Add(new FileExtension
+                {
+                    Enabled = node.Attributes["enabled"].Value.TryParseBool(),
+                    Value = node.Attributes["value"].Value,
+                    Type = node.Attributes["type"].Value
+                });
+            }
+
+            return fileList;
+        }
+
+        private static void GetModules(IConfiguration configuration,
+            XmlDocument xmlDocument)
+        {
+            var modules = new List<Module>();
+
+            var nodes = xmlDocument.SelectNodes("/config/modules/add[@enabled='true']");
+
+            foreach (XmlNode node in nodes)
+            {
+                modules.Add(new Module
+                {
+                    Enabled = node.Attributes["enabled"].Value.TryParseBool(),
+                    AssemblyName = node.Attributes["assembly"].Value,
+                    Type = node.Attributes["type"].Value
+                });
+            }
+
+            configuration.Modules = modules;
         }
     }
 }

@@ -8,8 +8,8 @@
       <add enabled="true" key="Project.AddItem" value="dotnet new {project.type} -o {project.path}" />
     </commands>
   </build>
-  <output>
-    <add name="Web">
+  <outputs>
+    <add enabled="true" name="Web">
       <files>
         <paths>
           <add filter="src\**" from="src" to="App" />
@@ -25,8 +25,8 @@
         </extensions>
       </files>
     </add>
-  </output>
+  </outputs>
   <modules>
-    <add enabled="true" assembly="PackageManager.DotNetCliModule" />
+    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />
   </modules>
 </config>

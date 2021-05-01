@@ -8,10 +8,12 @@ namespace PackageManager.DotNetCliModule
 {
     public class PrimaryModule : ModuleBase
     {
+        private readonly IConfiguration configuration;
+
         public PrimaryModule(IConfiguration configuration)
             : base(configuration)
         {
-
+            this.configuration = configuration;
         }
 
         public override Task<bool> CleanUpAsync(CancellationToken cancellationToken)

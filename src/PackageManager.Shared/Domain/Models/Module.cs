@@ -12,5 +12,7 @@ namespace PackageManager.Shared.Domain.Models
         public bool Enabled { get; set; }
         public string AssemblyName  { get; set; }
         public Assembly Assembly => Assembly.LoadFrom(AssemblyName);
+
+        public string Type { get; set; }
     }
 }

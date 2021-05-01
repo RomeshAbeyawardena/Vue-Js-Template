@@ -19,5 +19,15 @@ namespace PackageManager.Shared.Base
 
         public abstract Task<bool> RunAsync(CancellationToken cancellationToken);
         public abstract Task<bool> CleanUpAsync(CancellationToken cancellationToken);
+
+        public virtual void Dispose()
+        {
+        }
+
+        public virtual ValueTask DisposeAsync()
+        {
+            Dispose();
+            return ValueTask.CompletedTask;
+        }
     }
 }

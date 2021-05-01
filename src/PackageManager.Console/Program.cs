@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Domain.Models;
+using PackageManager.Shared;
 
 namespace PackageManager.Console
 {
@@ -55,7 +56,8 @@ namespace PackageManager.Console
                 .AddSingleton<Shared.Abstractions.IConfiguration>(new Shared
                 .Configuration(SolutionName, Output, 
                     projectNamesList, XmlConfigurationPath))
-                .AddSingleton<IConfigurationLoader, ConfigurationLoader>();
+                .AddSingleton<IConfigurationLoader, ConfigurationLoader>()
+                .AddSingleton<IModuleLoader, ModuleLoader>();
         }
 
         static readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();

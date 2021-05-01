@@ -15,28 +15,42 @@ namespace PackageManager.Console
     {
         private readonly Shared.Abstractions.IConfiguration configuration;
         private readonly IConfigurationLoader configurationLoader;
-
+        private readonly IModuleLoader moduleLoader;
+        private IModule currentModule;
         public Startup(Shared.Abstractions.IConfiguration configuration,
-            IConfigurationLoader configurationLoader)
+            IConfigurationLoader configurationLoader,
+            IModuleLoader moduleLoader)
         {
             this.configuration = configuration;
             this.configurationLoader = configurationLoader;
+            this.moduleLoader = moduleLoader;
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            StopAsync().Wait();
         }
 
-        public Task StartAsync(CancellationToken cancellationToken = default)
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            configurationLoader.LoadConfigurationFromXml(configuration, "config.xml");
-            return Task.CompletedTask;
+            configurationLoader
+                .LoadConfigurationFromXml(configuration, "config.xml");
+
+            var modules = moduleLoader.GetModules(null, configuration);
+
+            foreach (var module in modules)
+            {
+                currentModule = module;
+                await module
+                    .RunAsync(cancellationToken);
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return currentModule?
+                .DisposeAsync()
+                .AsTask();
         }
     }
 }

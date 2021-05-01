@@ -8,8 +8,8 @@ namespace PackageManager.Shared.Domain.Models
 {
     public class File
     {
-        public bool Enabled { get; set; }
-        public string Value { get; set; }
-        public string Type { get; set; }
+        public string Filter { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
     }
 }
