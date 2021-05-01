@@ -2,7 +2,8 @@
   "profiles": {
     "PackageManager.Console": {
       "commandName": "Project",
-      "commandLineArgs": " -s MySolution -o \"C:\\source\\repos\" -n Shared,Web,Core,WebApi"
+      "commandLineArgs": " -s MySolution -o \"C:\\source\\repos\" -n Shared,Web,Core,WebApi",
+      "remoteDebugEnabled": false
     }
   }
 }

@@ -26,6 +26,11 @@
       </files>
     </add>
   </outputs>
+  <consoles>
+    <hosts>
+      <add enabled="true" name="PowerShell" path="Powershell" />
+    </hosts>
+  </consoles>
   <modules>
     <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />
   </modules>

@@ -68,14 +68,12 @@ namespace PackageManager.Shared.Domain.Models
             var outputNodes = xmlDocument.SelectNodes(getOutputsXPath.Format(Action_Add));
 
             var outputList = new List<Output>();
+            
             foreach (XmlNode node in outputNodes)
             {
-                outputList.Add(new Output { 
-                    Action = Action_Add,
-                    Name = node.Attributes["name"].Value,
-                    Files = GetFiles(node),
-                    FileExtensions = GetFileExtensions(node)
-                });
+                var output = node.GetValues<Output>();
+                output.Action = Action_Add;
+                outputList.Add(output);
             }
             configuration.Outputs = outputList;
         }

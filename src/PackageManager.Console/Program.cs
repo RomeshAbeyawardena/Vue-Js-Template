@@ -8,6 +8,7 @@ using System.Threading;
 using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Domain.Models;
 using PackageManager.Shared;
+using Microsoft.Extensions.Logging;
 
 namespace PackageManager.Console
 {
@@ -32,8 +33,6 @@ namespace PackageManager.Console
             SystemConsole.CancelKeyPress += SystemConsole_CancelKeyPress;
             Arguments.Populate();
 
-            SystemConsole.WriteLine("{0} {1} {2}", SolutionName, Output, ProjectNames);
-            
             startupHost = new StartupHost(RegisterServices);
 
             await startupHost.StartAsync(cancellationTokenSource.Token);
@@ -53,8 +52,9 @@ namespace PackageManager.Console
             var projectNamesList = ProjectNames.Split(',');
 
             return services
-                .AddSingleton<Shared.Abstractions.IConfiguration>(new Shared
-                .Configuration(SolutionName, Output, 
+                .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
+                .AddSingleton(serviceProvider => LoggerFactory.Create(a => a.AddConsole()))
+                .AddSingleton<Shared.Abstractions.IConfiguration>(new Configuration(SolutionName, Output, 
                     projectNamesList, XmlConfigurationPath))
                 .AddSingleton<IConfigurationLoader, ConfigurationLoader>()
                 .AddSingleton<IModuleLoader, ModuleLoader>();

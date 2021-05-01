@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using PackageManager.Shared.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,17 @@ namespace PackageManager.Console
         private readonly Shared.Abstractions.IConfiguration configuration;
         private readonly IConfigurationLoader configurationLoader;
         private readonly IModuleLoader moduleLoader;
+        private readonly ILogger<Startup> logger;
         private IModule currentModule;
         public Startup(Shared.Abstractions.IConfiguration configuration,
             IConfigurationLoader configurationLoader,
-            IModuleLoader moduleLoader)
+            IModuleLoader moduleLoader,
+            ILogger<Startup> logger)
         {
             this.configuration = configuration;
             this.configurationLoader = configurationLoader;
             this.moduleLoader = moduleLoader;
+            this.logger = logger;
         }
 
         public void Dispose()
@@ -36,12 +40,14 @@ namespace PackageManager.Console
             configurationLoader
                 .LoadConfigurationFromXml(configuration, "config.xml");
 
+            logger.LogInformation("Added configuration from config.xml");
+
             var modules = moduleLoader.GetModules(null, configuration);
 
             foreach (var module in modules)
             {
                 currentModule = module;
-                await module
+                await currentModule
                     .RunAsync(cancellationToken);
             }
         }
