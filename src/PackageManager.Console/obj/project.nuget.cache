@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "wVb2BJHVbtVlLZXPCArst++f/GnMoxV1I/bIlEcN2rPwuMr9gRYbG+hdMAxmdFy5RC0EF4cDh2NU8rBnrmZ2yw==",
+  "success": true,
+  "projectFilePath": "C:\\Dev\\Personal\\Vue-Js-Template\\src\\PackageManager.Console\\PackageManager.Console.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\romes\\.nuget\\packages\\microsoft.extensions.configuration\\5.0.0\\microsoft.extensions.configuration.5.0.0.nupkg.sha512",
+    "C:\\Users\\romes\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\romes\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\5.0.1\\microsoft.extensions.dependencyinjection.5.0.1.nupkg.sha512",
+    "C:\\Users\\romes\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\romes\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\5.0.0\\microsoft.extensions.fileproviders.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\romes\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\5.0.0\\microsoft.extensions.hosting.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\romes\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+    "C:\\Users\\romes\\.nuget\\packages\\utility.commandline.arguments\\5.0.0\\utility.commandline.arguments.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

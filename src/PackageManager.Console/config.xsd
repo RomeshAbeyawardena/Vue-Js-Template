@@ -1,0 +1,94 @@
+﻿<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="build">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="commands">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="add" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="enabled" use="optional"/>
+                            <xs:attribute type="xs:string" name="key" use="optional"/>
+                            <xs:attribute type="xs:string" name="value" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="remove">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="enabled"/>
+                            <xs:attribute type="xs:string" name="key"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="output">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="add">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="files">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="paths">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="add" maxOccurs="unbounded" minOccurs="0">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute type="xs:string" name="filter" use="optional"/>
+                                        <xs:attribute type="xs:string" name="from" use="optional"/>
+                                        <xs:attribute type="xs:string" name="to" use="optional"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="extensions">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="add" maxOccurs="unbounded" minOccurs="0">
+                                  <xs:complexType>
+                                    <xs:simpleContent>
+                                      <xs:extension base="xs:string">
+                                        <xs:attribute type="xs:string" name="enabled" use="optional"/>
+                                        <xs:attribute type="xs:string" name="value" use="optional"/>
+                                        <xs:attribute type="xs:string" name="type" use="optional"/>
+                                      </xs:extension>
+                                    </xs:simpleContent>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="name"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

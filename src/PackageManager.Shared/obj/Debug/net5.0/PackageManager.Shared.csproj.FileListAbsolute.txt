@@ -1,0 +1,16 @@
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\bin\Debug\net5.0\PackageManager.Shared.exe
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\bin\Debug\net5.0\PackageManager.Shared.deps.json
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\bin\Debug\net5.0\PackageManager.Shared.runtimeconfig.json
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\bin\Debug\net5.0\PackageManager.Shared.runtimeconfig.dev.json
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\bin\Debug\net5.0\PackageManager.Shared.dll
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\bin\Debug\net5.0\ref\PackageManager.Shared.dll
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\bin\Debug\net5.0\PackageManager.Shared.pdb
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\PackageManager.Shared.csprojAssemblyReference.cache
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\PackageManager.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\PackageManager.Shared.AssemblyInfoInputs.cache
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\PackageManager.Shared.AssemblyInfo.cs
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\PackageManager.Shared.csproj.CoreCompileInputs.cache
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\PackageManager.Shared.dll
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\ref\PackageManager.Shared.dll
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\PackageManager.Shared.pdb
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Shared\obj\Debug\net5.0\PackageManager.Shared.genruntimeconfig.cache

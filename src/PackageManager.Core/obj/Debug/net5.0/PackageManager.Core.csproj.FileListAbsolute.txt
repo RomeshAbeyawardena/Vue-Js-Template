@@ -1,0 +1,15 @@
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\bin\Debug\net5.0\PackageManager.Core.exe
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\bin\Debug\net5.0\PackageManager.Core.deps.json
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\bin\Debug\net5.0\PackageManager.Core.runtimeconfig.json
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\bin\Debug\net5.0\PackageManager.Core.runtimeconfig.dev.json
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\bin\Debug\net5.0\PackageManager.Core.dll
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\bin\Debug\net5.0\ref\PackageManager.Core.dll
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\bin\Debug\net5.0\PackageManager.Core.pdb
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\obj\Debug\net5.0\PackageManager.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\obj\Debug\net5.0\PackageManager.Core.AssemblyInfoInputs.cache
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\obj\Debug\net5.0\PackageManager.Core.AssemblyInfo.cs
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\obj\Debug\net5.0\PackageManager.Core.csproj.CoreCompileInputs.cache
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\obj\Debug\net5.0\PackageManager.Core.dll
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\obj\Debug\net5.0\ref\PackageManager.Core.dll
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\obj\Debug\net5.0\PackageManager.Core.pdb
+C:\Dev\Personal\Vue-Js-Template\src\PackageManager.Core\obj\Debug\net5.0\PackageManager.Core.genruntimeconfig.cache
