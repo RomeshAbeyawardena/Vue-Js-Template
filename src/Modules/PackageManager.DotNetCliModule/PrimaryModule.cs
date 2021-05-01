@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Base;
+using PackageManager.Shared.Extensions;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -12,13 +13,16 @@ namespace PackageManager.DotNetCliModule
     public class PrimaryModule : ModuleBase
     {
         private readonly IConfiguration configuration;
+        private readonly IConsoleHostDispatcher consoleHostDispatcher;
         private readonly ILogger<PrimaryModule> logger;
 
         public PrimaryModule(IConfiguration configuration,
+            IConsoleHostDispatcher consoleHostDispatcher,
             ILogger<PrimaryModule> logger)
             : base(configuration)
         {
             this.configuration = configuration;
+            this.consoleHostDispatcher = consoleHostDispatcher;
             this.logger = logger;
         }
 
@@ -27,25 +31,35 @@ namespace PackageManager.DotNetCliModule
             throw new NotImplementedException();
         }
 
-        public override Task<bool> RunAsync(CancellationToken cancellationToken)
+        public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
+            
+            const string projectTypeParameter = "{project.type}";
             var projectAddCommand = configuration
-                .Commands.FirstOrDefault(a => a.Key == "Project.Add");
+                .Commands.First(a => a.Key == "Project.Add");
 
             var solutionAddCommand = configuration
-                .Commands.FirstOrDefault(a => a.Key == "Solution.Add");
+                .Commands.First(a => a.Key == "Solution.Add");
+
+            var consoleHost = consoleHostDispatcher.DefaultConsoleHost;
 
             var solutionDirectory = $"{configuration.Output}\\{configuration.SolutionName}";
+
+            await consoleHostDispatcher.Dispatch(consoleHost, projectAddCommand
+                .Value
+                .Replace(projectTypeParameter, "sln")
+                .Replace("{solution.path}", solutionDirectory));
+
             foreach (var project in configuration.ProjectNames)
             {
-                var projectDirectory = $"{solutionDirectory}\\{configuration.SolutionName}.{project}";
-                Console.Write("\r\nEnter project type for {0}: ", project);
+                var projectName = $"{configuration.SolutionName}.{project}";
+                var projectDirectory = $"{solutionDirectory}\\{projectName}";
+                Console.Write("\r\nEnter project type for {0}: ", projectName);
                 var type = Console.ReadLine();
-                Process.Start("powershell", projectAddCommand.Value
-                    .Replace("{project.type}", type)
-                    .Replace("{solution.path}", projectDirectory))
-                    .WaitForExit();
 
+                await consoleHostDispatcher.Dispatch(consoleHost, projectAddCommand.Value
+                        .Replace($"{projectTypeParameter}", type)
+                        .Replace("{solution.path}", projectDirectory));
             }
 
             throw new NotImplementedException();

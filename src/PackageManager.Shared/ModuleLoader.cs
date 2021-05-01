@@ -18,8 +18,7 @@ namespace PackageManager.Shared
             this.serviceProvider = serviceProvider;
         }
 
-        public IEnumerable<IModule> GetModules(IEnumerable<Assembly> assemblies, 
-            IConfiguration configuration)
+        public IEnumerable<IModule> GetModules( IConfiguration configuration)
         {
             var assemblyTypes = new List<Type>();
             foreach (var module in configuration.Modules)

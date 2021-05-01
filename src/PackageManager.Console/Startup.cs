@@ -42,7 +42,7 @@ namespace PackageManager.Console
 
             logger.LogInformation("Added configuration from config.xml");
 
-            var modules = moduleLoader.GetModules(null, configuration);
+            var modules = moduleLoader.GetModules(configuration);
 
             foreach (var module in modules)
             {

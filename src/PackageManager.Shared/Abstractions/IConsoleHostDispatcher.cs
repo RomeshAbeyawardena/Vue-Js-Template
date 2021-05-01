@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PackageManager.Shared.Abstractions
 {
-    public interface IModuleLoader
+    public interface IConsoleHostDispatcher
     {
-        IEnumerable<IModule> GetModules(IConfiguration configuration);
+        Task Dispatch(IConsoleHost consoleHost, string arguments);
+        IConsoleHost DefaultConsoleHost { get; }
     }
 }

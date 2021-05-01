@@ -57,7 +57,8 @@ namespace PackageManager.Console
                 .AddSingleton<Shared.Abstractions.IConfiguration>(new Configuration(SolutionName, Output, 
                     projectNamesList, XmlConfigurationPath))
                 .AddSingleton<IConfigurationLoader, ConfigurationLoader>()
-                .AddSingleton<IModuleLoader, ModuleLoader>();
+                .AddSingleton<IModuleLoader, ModuleLoader>()
+                .AddSingleton<IConsoleHostDispatcher, ConsoleHostDispatcher>();
         }
 
         static readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();

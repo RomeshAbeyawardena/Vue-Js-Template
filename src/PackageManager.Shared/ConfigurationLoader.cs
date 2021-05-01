@@ -26,6 +26,8 @@ namespace PackageManager.Shared.Domain.Models
 
             GetModules(configuration, xmlDocument);
 
+            GetConsoleHosts(configuration, xmlDocument);
+
             return configuration;
         }
 
@@ -118,6 +120,22 @@ namespace PackageManager.Shared.Domain.Models
             }
 
             configuration.Modules = modules;
+        }
+
+        private static void GetConsoleHosts(IConfiguration configuration,
+            XmlDocument xmlDocument)
+        {
+            const string consoleHostXPath = "/config/consoles/hosts/add[@enabled='true']";
+
+            var nodes = xmlDocument.SelectNodes(consoleHostXPath);
+            var consoleHosts = new List<IConsoleHost>();
+            foreach (XmlNode node in nodes)
+            {
+                var consoleHost = node.GetValues<ConsoleHost>();
+                consoleHosts.Add(consoleHost);
+            }
+
+            configuration.ConsoleHosts = consoleHosts;
         }
     }
 }

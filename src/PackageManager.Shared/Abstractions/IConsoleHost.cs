@@ -8,8 +8,10 @@ namespace PackageManager.Shared.Abstractions
 {
     public interface IConsoleHost
     {
-        public bool Enabled { get; set; }
-        public string Name { get; set; }
-        public string Path { get; set; }
+        bool Default { get; set; }
+        bool Enabled { get; set; }
+        string Name { get; set; }
+        string Path { get; set; }
+        string Arguments { get; set; }
     }
 }
