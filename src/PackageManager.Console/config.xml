@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<config xmlns="config.xsd">
+<config>
   <build>
     <commands>
+      <remove enabled="true" key="Project.Defaults" />
       <add enabled="true" key="Solution.Add" value="dotnet sln add {project.type}" />
       <add enabled="true" key="Project.Add" value="dotnet new {project.type} -o {solution.path}" />
-      <remove enabled="true" key="Project.Defaults" />
+      <add enabled="true" key="Project.AddItem" value="dotnet new {project.type} -o {project.path}" />
     </commands>
   </build>
   <output>

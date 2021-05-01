@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PackageManager.Shared.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,17 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Console
 {
-    public class DefaultConsoleHost : IHost
+    public class Startup : IStartup
     {
-        public IServiceProvider Services => throw new NotImplementedException();
+        private readonly Shared.Abstractions.IConfiguration configuration;
+        private readonly IConfigurationLoader configurationLoader;
+
+        public Startup(Shared.Abstractions.IConfiguration configuration,
+            IConfigurationLoader configurationLoader)
+        {
+            this.configuration = configuration;
+            this.configurationLoader = configurationLoader;
+        }
 
         public void Dispose()
         {
@@ -21,7 +30,8 @@ namespace PackageManager.Console
 
         public Task StartAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            configurationLoader.LoadConfigurationFromXml(configuration, "config.xml");
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken = default)

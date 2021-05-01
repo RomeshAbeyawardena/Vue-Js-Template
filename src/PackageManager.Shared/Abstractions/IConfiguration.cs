@@ -11,10 +11,10 @@ namespace PackageManager.Shared.Abstractions
     {
         string SolutionName { get; }
         string Output { get; }
-        string ProjectName { get; }
-        IEnumerable<Module> Modules { get; }
-        IEnumerable<Command> Commands { get; }
-        IEnumerable<File> Files { get; }
-        IEnumerable<FileExtension> FileExtensions { get; }
+        IEnumerable<string> ProjectNames { get; }
+        IEnumerable<Module> Modules { get; set; }
+        IEnumerable<Command> Commands { get; set; }
+        IEnumerable<Output> Outputs { get; set; }
+        string ConfigurationPath { get; }
     }
 }

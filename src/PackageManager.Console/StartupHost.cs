@@ -11,26 +11,36 @@ namespace PackageManager.Console
 {
     public class StartupHost : IHost
     {
+        private Startup startup;
         public StartupHost(IServiceCollection services)
         {
-            Services = services;
+            Services = services
+                .AddSingleton<Startup>()
+                .BuildServiceProvider();
+        }
+
+        public StartupHost(Func<IServiceCollection, IServiceCollection> servicesAction)
+            : this(servicesAction(new ServiceCollection()))
+        {
+            
         }
 
         public IServiceProvider Services { get; }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            startup.Dispose();
         }
 
         public Task StartAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            startup = Services.GetRequiredService<Startup>();
+            return startup.StartAsync(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return startup.StopAsync(cancellationToken);
         }
     }
 }

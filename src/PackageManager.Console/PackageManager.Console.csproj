@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PackageManager.Shared\PackageManager.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

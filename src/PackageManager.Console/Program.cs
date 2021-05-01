@@ -1,6 +1,12 @@
 ﻿using SystemConsole = System.Console;
 using Utility.CommandLine;
 using System.Xml;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using System.Threading;
+using PackageManager.Shared.Abstractions;
+using PackageManager.Shared.Domain.Models;
 
 namespace PackageManager.Console
 {
@@ -15,18 +21,43 @@ namespace PackageManager.Console
         [Argument('n', "projectNames", "Output of files")]
         static string ProjectNames { get; set; }
 
-        static void Main(string[] args)
-        {
-            Arguments.Populate();
-            SystemConsole.WriteLine("{0} {1} {2}", SolutionName, Output, ProjectNames);
+        [Argument('x', "XML configuration path", "Enables custom configuration")]
+        static string XmlConfigurationPath { get; set; }
 
-            var xmlDocument = new XmlDocument();
-            xmlDocument.Load("config.xml");
-            var nodes = xmlDocument.SelectNodes("/config/build/commands/add[@enabled='true']|remove[@enabled='true']");
-            foreach (var item in ProjectNames.Split(','))
-            {
-                SystemConsole.WriteLine(item);
-            }
+        static StartupHost startupHost;
+
+        static async Task Main(string[] args)
+        {
+            SystemConsole.CancelKeyPress += SystemConsole_CancelKeyPress;
+            Arguments.Populate();
+
+            SystemConsole.WriteLine("{0} {1} {2}", SolutionName, Output, ProjectNames);
+            
+            startupHost = new StartupHost(RegisterServices);
+
+            await startupHost.StartAsync(cancellationTokenSource.Token);
         }
+
+        private static void SystemConsole_CancelKeyPress(object sender, System.ConsoleCancelEventArgs e)
+        {
+            e.Cancel = true;
+            cancellationTokenSource.Cancel();
+            startupHost
+                .StopAsync(cancellationTokenSource.Token)
+                .Wait();
+        }
+
+        static IServiceCollection RegisterServices(IServiceCollection services)
+        {
+            var projectNamesList = ProjectNames.Split(',');
+
+            return services
+                .AddSingleton<Shared.Abstractions.IConfiguration>(new Shared
+                .Configuration(SolutionName, Output, 
+                    projectNamesList, XmlConfigurationPath))
+                .AddSingleton<IConfigurationLoader, ConfigurationLoader>();
+        }
+
+        static readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     }
 }
