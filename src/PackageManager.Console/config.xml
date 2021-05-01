@@ -3,9 +3,9 @@
   <build>
     <commands>
       <remove enabled="true" key="Project.Defaults" />
-      <add enabled="true" key="Solution.Add" value="dotnet sln add {project.type}" />
+      <add enabled="true" key="Solution.Add" value="dotnet sln {solution.path} add {project.path}" />
       <add enabled="true" key="Project.Add" value="dotnet new {project.type} -o {solution.path}" />
-      <add enabled="true" key="Project.AddItem" value="dotnet new {project.type} -o {project.path}" />
+      <add enabled="true" key="Project.AddItem" value="dotnet new {project.type} -o {solution.path}" />
     </commands>
   </build>
   <outputs>

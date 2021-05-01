@@ -33,8 +33,13 @@ namespace PackageManager.DotNetCliModule
 
         public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
-            
             const string projectTypeParameter = "{project.type}";
+            const string solutionPathParameter = "{solution.path}";
+            const string projectPathParameter = "{project.path}";
+
+            var solutionAddProjectCommand = configuration
+                .Commands.First(a => a.Key == "Solution.Add");
+
             var projectAddCommand = configuration
                 .Commands.First(a => a.Key == "Project.Add");
 
@@ -45,11 +50,12 @@ namespace PackageManager.DotNetCliModule
 
             var solutionDirectory = $"{configuration.Output}\\{configuration.SolutionName}";
 
-            await consoleHostDispatcher.Dispatch(consoleHost, projectAddCommand
-                .Value
+            await consoleHostDispatcher.Dispatch(consoleHost, projectAddCommand.Value
                 .Replace(projectTypeParameter, "sln")
-                .Replace("{solution.path}", solutionDirectory));
+                .Replace(solutionPathParameter, solutionDirectory), 
+                cancellationToken);
 
+            bool configureWebApplicationWithRazorandVue = false;
             foreach (var project in configuration.ProjectNames)
             {
                 var projectName = $"{configuration.SolutionName}.{project}";
@@ -57,9 +63,26 @@ namespace PackageManager.DotNetCliModule
                 Console.Write("\r\nEnter project type for {0}: ", projectName);
                 var type = Console.ReadLine();
 
+                if (type.Equals("web", StringComparison.InvariantCultureIgnoreCase) 
+                    && projectName.EndsWith("Web", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.Write("Configure this web application with an empty razor + vue template? Y|Yes or N|No");
+                    var response = Console.ReadLine();
+                    configureWebApplicationWithRazorandVue = response.Equals("Yes", 
+                                StringComparison.InvariantCultureIgnoreCase) 
+                            || response.Equals("Y", 
+                                StringComparison.InvariantCultureIgnoreCase);
+                }
+
                 await consoleHostDispatcher.Dispatch(consoleHost, projectAddCommand.Value
-                        .Replace($"{projectTypeParameter}", type)
-                        .Replace("{solution.path}", projectDirectory));
+                        .Replace(projectTypeParameter, type)
+                        .Replace(solutionPathParameter, projectDirectory), 
+                        cancellationToken);
+
+                await consoleHostDispatcher.Dispatch(consoleHost, solutionAddProjectCommand.Value
+                        .Replace(projectPathParameter, $"{solutionDirectory}\\{projectName}\\")
+                        .Replace(solutionPathParameter, $"{solutionDirectory}\\{configuration.SolutionName}.sln"), 
+                        cancellationToken);
             }
 
             throw new NotImplementedException();
