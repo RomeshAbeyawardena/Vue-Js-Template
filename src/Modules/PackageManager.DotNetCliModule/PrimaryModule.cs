@@ -59,6 +59,7 @@ namespace PackageManager.DotNetCliModule
             foreach (var project in configuration.ProjectNames)
             {
                 var projectName = $"{configuration.SolutionName}.{project}";
+                var projectPath = $"{solutionDirectory}\\{projectName}\\";
                 var projectDirectory = $"{solutionDirectory}\\{projectName}";
                 Console.Write("\r\nEnter project type for {0}: ", projectName);
                 var type = Console.ReadLine();
@@ -80,12 +81,27 @@ namespace PackageManager.DotNetCliModule
                         cancellationToken);
 
                 await consoleHostDispatcher.Dispatch(consoleHost, solutionAddProjectCommand.Value
-                        .Replace(projectPathParameter, $"{solutionDirectory}\\{projectName}\\")
+                        .Replace(projectPathParameter, projectPath)
                         .Replace(solutionPathParameter, $"{solutionDirectory}\\{configuration.SolutionName}.sln"), 
                         cancellationToken);
+
+                if (configureWebApplicationWithRazorandVue)
+                {
+                    var startupFilePath = $"{projectDirectory}\\Startup.cs";
+                    System.IO.File.Copy("Templates/Web/Startup.cs.txt", startupFilePath, true);
+                    var text = System.IO.File.ReadAllText(startupFilePath);
+
+                    System.IO.File.WriteAllText(startupFilePath, text.Replace("{project.name}", projectName));
+
+                    var webOutputs = configuration.Outputs.First(o => o.Name == "Web");
+                    var di = new System.IO.DirectoryInfo("Templates/Web/App");
+                    di.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+
+                    webOutputs.FileExtensions.Select(a => a.Value);
+                }
             }
 
-            throw new NotImplementedException();
+            return true;
         }
     }
 }
