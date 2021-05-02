@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PackageManager.Shared;
 using PackageManager.Shared.Abstractions;
@@ -17,12 +18,13 @@ namespace PackageManager.Core.Extensions
             Action<ILoggingBuilder> buildLoggerFactory)
         {
             return services
+                .AddMediatR(typeof(ServiceCollectionExtensions).Assembly)
                 .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
                 .AddSingleton(serviceProvider => LoggerFactory.Create(buildLoggerFactory))
                 .AddSingleton<IConfigurationLoader, ConfigurationLoader>()
                 .AddSingleton<IModuleLoader, ModuleLoader>()
                 .AddSingleton<IConsoleHostDispatcher, ConsoleHostDispatcher>()
-                .AddSingleton<IFileProvider, FileProvider>(); ;
+                .AddSingleton<IFileProvider, FileProvider>();
         }
     }
 }

@@ -16,7 +16,6 @@ namespace PackageManager.DotNetCliModule
     public class PrimaryModule : ModuleBase
     {
         private readonly IConfiguration configuration;
-        private readonly IConsoleHostDispatcher consoleHostDispatcher;
         
         private Task<Command> GetCommandByKey(string key)
         {
@@ -27,13 +26,11 @@ namespace PackageManager.DotNetCliModule
         }
 
         public PrimaryModule(IConfiguration configuration,
-            IConsoleHostDispatcher consoleHostDispatcher,
             ILogger<PrimaryModule> logger,
             IMediator mediator)
             : base(logger, configuration, mediator)
         {
             this.configuration = configuration;
-            this.consoleHostDispatcher = consoleHostDispatcher;
         }
 
         public override Task<bool> CleanUpAsync(CancellationToken cancellationToken)
@@ -53,14 +50,14 @@ namespace PackageManager.DotNetCliModule
 
             var solutionAddCommand = await GetCommandByKey("Solution.Add");
 
-            var consoleHost = consoleHostDispatcher.DefaultConsoleHost;
-
             var solutionDirectory = $"{configuration.Output}\\{configuration.SolutionName}";
 
-            await consoleHostDispatcher.Dispatch(consoleHost, projectAddCommand.Value
+            await Mediator.Send(new Shared.Queries.DispatchConsoleHostCommand.Query
+            {
+                Arguments = projectAddCommand.Value
                 .Replace(projectTypeParameter, "sln")
-                .Replace(solutionPathParameter, solutionDirectory), 
-                cancellationToken);
+                .Replace(solutionPathParameter, solutionDirectory)
+            }, cancellationToken);
 
             bool configureWebApplicationWithRazorandVue = false;
             foreach (var project in configuration.ProjectNames)
@@ -82,15 +79,19 @@ namespace PackageManager.DotNetCliModule
                                 StringComparison.InvariantCultureIgnoreCase);
                 }
 
-                await consoleHostDispatcher.Dispatch(consoleHost, projectAddCommand.Value
+                await Mediator.Send(new Shared.Queries.DispatchConsoleHostCommand.Query
+                {
+                    Arguments = projectAddCommand.Value
                         .Replace(projectTypeParameter, type)
-                        .Replace(solutionPathParameter, projectDirectory), 
-                        cancellationToken);
+                        .Replace(solutionPathParameter, projectDirectory)
+                }, cancellationToken);
 
-                await consoleHostDispatcher.Dispatch(consoleHost, solutionAddProjectCommand.Value
+                await Mediator.Send(new Shared.Queries.DispatchConsoleHostCommand.Query
+                {
+                    Arguments = solutionAddProjectCommand.Value
                         .Replace(projectPathParameter, projectPath)
-                        .Replace(solutionPathParameter, $"{solutionDirectory}\\{configuration.SolutionName}.sln"), 
-                        cancellationToken);
+                        .Replace(solutionPathParameter, $"{solutionDirectory}\\{configuration.SolutionName}.sln")
+                }, cancellationToken);
 
                 if (configureWebApplicationWithRazorandVue)
                 {

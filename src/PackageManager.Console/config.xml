@@ -28,11 +28,11 @@
   </outputs>
   <console>
     <hosts>
-      <add enabled="true" default="true" name="PowerShell" path="pwsh" arguments="-c {console.arguments}" />
+      <add enabled="true" key="powershell" default="true" name="PowerShell" path="pwsh" arguments="-c {console.arguments}" />
     </hosts>
   </console>
   <modules>
-    <!--<add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />-->
-    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.TestModule" />
+    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />
+    <!--<add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.TestModule" />-->
   </modules>
 </config>
