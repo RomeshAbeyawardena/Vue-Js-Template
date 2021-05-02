@@ -33,11 +33,18 @@ namespace PackageManager.DotNetCliModule
         public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
             var outputs = await Mediator.Send(new Shared.Queries.GetConfigurationFilePaths.Query { Name = "Web" }, cancellationToken);
-            var files = fileProvider.GetFiles("Templates");
-            foreach (var file in files)
+
+            foreach(var output in outputs)
             {
-                logger.LogInformation(file.FullName);
+                var extensions = string.Join(',', output.FileExtensions.Select(a => a.Value));
+                var files = fileProvider.GetFiles(output.Source, extensions, ',');
+
+                foreach (var file in files)
+                {
+                    logger.LogInformation(file.FullName);
+                }
             }
+            
 
             return true;
         }

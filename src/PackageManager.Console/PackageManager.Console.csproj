@@ -6,6 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\Web\App\src\scss\index.scss" />
+    <None Remove="Templates\Web\App\src\views\app.vue" />
+    <None Remove="Templates\Web\App\webpack.config.js" />
     <None Remove="Templates\Web\Pages\Shared\layout.cshtml" />
     <None Remove="Templates\Web\Pages\_viewImports.cshtml" />
     <None Remove="Templates\Web\Pages\_viewStart.cshtml" />
@@ -13,6 +16,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Templates\Web\App\src\scss\index.scss">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Web\App\src\views\app.vue">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\Web\App\webpack.config.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Templates\Web\Pages\Shared\layout.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
