@@ -95,7 +95,7 @@ namespace PackageManager.Shared.Domain.Models
         private static IEnumerable<FileExtension> GetFileExtensions(XmlNode outputNode)
         {
             var fileList = new List<FileExtension>();
-            const string getFilesXPath = "path[@enabled='true']";
+            const string getFilesXPath = "extension[@enabled='true']";
             var nodes = outputNode.SelectNodes(getFilesXPath);
             foreach (XmlNode node in nodes)
             {

@@ -30,15 +30,16 @@ namespace PackageManager.DotNetCliModule
             throw new NotImplementedException();
         }
 
-        public override Task<bool> RunAsync(CancellationToken cancellationToken)
+        public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
-            var outputs = Configuration.Outputs;
+            var outputs = await Mediator.Send(new Shared.Queries.GetConfigurationFilePaths.Query { Name = "Web" }, cancellationToken);
             var files = fileProvider.GetFiles("Templates");
             foreach (var file in files)
             {
                 logger.LogInformation(file.FullName);
             }
-            return Task.FromResult(true);
+
+            return true;
         }
     }
 }

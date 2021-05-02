@@ -13,14 +13,14 @@
       <files>
         <paths>
           <add source="Templates\Web\App" to="App">
-            <path enabled="true" value="*.json" type="text" />
-            <path enabled="true" value="*.js" type="text" />
-            <path enabled="true" value="*.vue" type="text" />
-            <path enabled="true" value="*.scss" type="text" />
+            <extension enabled="true" value="*.json" type="text" />
+            <extension enabled="true" value="*.js" type="text" />
+            <extension enabled="true" value="*.vue" type="text" />
+            <extension enabled="true" value="*.scss" type="text" />
           </add>
           <add source="Templates\Web\Pages" to="Pages">
-            <path enabled="true" value="*.cs" type="C Sharp" />
-            <path enabled="true" value="*.cshtml" type="Razor" />
+            <extension enabled="true" value="*.cs" type="C Sharp" />
+            <extension enabled="true" value="*.cshtml" type="Razor" />
           </add>
         </paths>
       </files>
@@ -32,7 +32,7 @@
     </hosts>
   </console>
   <modules>
-    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />
-    <!--<add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.TestModule" />-->
+    <!--<add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />-->
+    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.TestModule" />
   </modules>
 </config>

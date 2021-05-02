@@ -12,15 +12,12 @@ namespace PackageManager.Core.Feature.DispatchConsoleHostCommand
 {
     public class Handler : IRequestHandler<Query>
     {
-        private readonly IConfiguration configuration;
         private readonly IConsoleHostDispatcher consoleHostDispatcher;
         private readonly IMediator mediator;
 
-        public Handler(IConfiguration configuration,
-            IConsoleHostDispatcher consoleHostDispatcher,
+        public Handler(IConsoleHostDispatcher consoleHostDispatcher,
             IMediator mediator)
         {
-            this.configuration = configuration;
             this.consoleHostDispatcher = consoleHostDispatcher;
             this.mediator = mediator;
         }
