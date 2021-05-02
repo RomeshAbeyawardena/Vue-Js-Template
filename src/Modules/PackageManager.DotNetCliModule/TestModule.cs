@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Base;
 using System;
@@ -17,7 +18,8 @@ namespace PackageManager.DotNetCliModule
 
         public TestModule(IConfiguration configuration,
             IFileProvider fileProvider,
-            ILogger<TestModule> logger) : base(configuration)
+            IMediator mediator,
+            ILogger<TestModule> logger) : base(logger, configuration, mediator)
         {
             this.fileProvider = fileProvider;
             this.logger = logger;

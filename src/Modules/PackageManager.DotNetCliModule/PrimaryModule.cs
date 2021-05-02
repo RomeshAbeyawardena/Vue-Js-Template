@@ -1,12 +1,15 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Base;
+using PackageManager.Shared.Domain.Models;
 using PackageManager.Shared.Extensions;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GetConfigurationCommandQuery = PackageManager.Shared.Queries.GetConfigurationCommand.Query;
 
 namespace PackageManager.DotNetCliModule
 {
@@ -14,16 +17,23 @@ namespace PackageManager.DotNetCliModule
     {
         private readonly IConfiguration configuration;
         private readonly IConsoleHostDispatcher consoleHostDispatcher;
-        private readonly ILogger<PrimaryModule> logger;
+        
+        private Task<Command> GetCommandByKey(string key)
+        {
+            return Mediator
+               .Send(new GetConfigurationCommandQuery { 
+                   Key = key 
+               });
+        }
 
         public PrimaryModule(IConfiguration configuration,
             IConsoleHostDispatcher consoleHostDispatcher,
-            ILogger<PrimaryModule> logger)
-            : base(configuration)
+            ILogger<PrimaryModule> logger,
+            IMediator mediator)
+            : base(logger, configuration, mediator)
         {
             this.configuration = configuration;
             this.consoleHostDispatcher = consoleHostDispatcher;
-            this.logger = logger;
         }
 
         public override Task<bool> CleanUpAsync(CancellationToken cancellationToken)
@@ -37,14 +47,11 @@ namespace PackageManager.DotNetCliModule
             const string solutionPathParameter = "{solution.path}";
             const string projectPathParameter = "{project.path}";
 
-            var solutionAddProjectCommand = configuration
-                .Commands.First(a => a.Key == "Solution.Add");
+            var solutionAddProjectCommand = await GetCommandByKey("Solution.Add");
 
-            var projectAddCommand = configuration
-                .Commands.First(a => a.Key == "Project.Add");
+            var projectAddCommand = await GetCommandByKey("Project.Add");
 
-            var solutionAddCommand = configuration
-                .Commands.First(a => a.Key == "Solution.Add");
+            var solutionAddCommand = await GetCommandByKey("Solution.Add");
 
             var consoleHost = consoleHostDispatcher.DefaultConsoleHost;
 

@@ -1,4 +1,6 @@
-﻿using PackageManager.Shared.Abstractions;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
+using PackageManager.Shared.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,13 @@ namespace PackageManager.Shared.Base
 {
     public abstract class ModuleBase : IModule
     {
-        public IConfiguration Configuration { get;  }
-
-        protected ModuleBase(IConfiguration configuration)
+        protected ModuleBase(ILogger logger,
+            IConfiguration configuration,
+            IMediator mediator)
         {
             Configuration = configuration;
+            Mediator = mediator;
+            Logger = logger;
         }
 
         public abstract Task<bool> RunAsync(CancellationToken cancellationToken);
@@ -29,5 +33,9 @@ namespace PackageManager.Shared.Base
             Dispose();
             return ValueTask.CompletedTask;
         }
+
+        protected ILogger Logger { get; }
+        public IConfiguration Configuration { get; }
+        public IMediator Mediator { get; }
     }
 }

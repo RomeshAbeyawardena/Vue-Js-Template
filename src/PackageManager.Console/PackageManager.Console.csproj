@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Modules\PackageManager.DotNetCliModule\PackageManager.DotNetCliModule.csproj" />
+    <ProjectReference Include="..\PackageManager.Core\PackageManager.Core.csproj" />
     <ProjectReference Include="..\PackageManager.Shared\PackageManager.Shared.csproj" />
   </ItemGroup>
 

@@ -9,6 +9,7 @@ using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Domain.Models;
 using PackageManager.Shared;
 using Microsoft.Extensions.Logging;
+using PackageManager.Core.Extensions;
 
 namespace PackageManager.Console
 {
@@ -52,14 +53,9 @@ namespace PackageManager.Console
             var projectNamesList = ProjectNames.Split(',');
 
             return services
-                .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
-                .AddSingleton(serviceProvider => LoggerFactory.Create(a => a.AddConsole()))
-                .AddSingleton<Shared.Abstractions.IConfiguration>(new Configuration(SolutionName, Output, 
-                    projectNamesList, XmlConfigurationPath))
-                .AddSingleton<IConfigurationLoader, ConfigurationLoader>()
-                .AddSingleton<IModuleLoader, ModuleLoader>()
-                .AddSingleton<IConsoleHostDispatcher, ConsoleHostDispatcher>()
-                .AddSingleton<IFileProvider, FileProvider>();
+                .RegisterServices(a => a.AddConsole())
+                .AddSingleton<Shared.Abstractions.IConfiguration>(new Configuration(SolutionName, Output,
+                    projectNamesList, XmlConfigurationPath));
         }
 
         static readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
