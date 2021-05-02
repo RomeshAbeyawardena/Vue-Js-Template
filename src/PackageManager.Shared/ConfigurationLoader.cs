@@ -71,7 +71,6 @@ namespace PackageManager.Shared.Domain.Models
             {
                 var output = node.GetValues<Output>();
                 output.Files = GetFiles(node);
-                output.FileExtensions = GetFileExtensions(node);
                 output.Action = Action_Add;
                 outputList.Add(output);
             }
@@ -86,6 +85,7 @@ namespace PackageManager.Shared.Domain.Models
             foreach (XmlNode node in nodes)
             {
                 var file = node.GetValues<File>();
+                file.FileExtensions = GetFileExtensions(node);
                 fileList.Add(file);
             }
 
@@ -95,7 +95,7 @@ namespace PackageManager.Shared.Domain.Models
         private static IEnumerable<FileExtension> GetFileExtensions(XmlNode outputNode)
         {
             var fileList = new List<FileExtension>();
-            const string getFilesXPath = "//add/files/extensions/add[@enabled='true']";
+            const string getFilesXPath = "path[@enabled='true']";
             var nodes = outputNode.SelectNodes(getFilesXPath);
             foreach (XmlNode node in nodes)
             {
@@ -125,7 +125,7 @@ namespace PackageManager.Shared.Domain.Models
         private static void GetConsoleHosts(IConfiguration configuration,
             XmlDocument xmlDocument)
         {
-            const string consoleHostXPath = "/config/consoles/hosts/add[@enabled='true']";
+            const string consoleHostXPath = "/config/console/hosts/add[@enabled='true']";
 
             var nodes = xmlDocument.SelectNodes(consoleHostXPath);
             var consoleHosts = new List<IConsoleHost>();

@@ -97,7 +97,7 @@ namespace PackageManager.DotNetCliModule
                     var di = new System.IO.DirectoryInfo("Templates/Web/App");
                     di.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
 
-                    webOutputs.FileExtensions.Select(a => a.Value);
+                    //webOutputs.FileExtensions.Select(a => a.Value);
                 }
             }
 

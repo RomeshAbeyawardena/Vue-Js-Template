@@ -10,7 +10,6 @@ namespace PackageManager.Shared.Domain.Models
     {
         public string Name { get; set; }
         public string Action { get; set; }
-        public IEnumerable<FileExtension> FileExtensions { get; set; }
         public IEnumerable<File> Files { get; set; }
     }
 }

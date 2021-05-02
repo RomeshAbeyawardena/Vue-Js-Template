@@ -12,17 +12,16 @@ namespace PackageManager.Shared
     {
         public IEnumerable<FileInfo> GetFiles(DirectoryInfo directory)
         {
-            return directory
-                .GetDirectories()
-                .SelectMany(a => a.GetDirectories())
-                .SelectMany(a => a.GetFiles())
-                .Union(directory.GetFiles());
+            var directories = directory.GetDirectories("*", SearchOption.AllDirectories);
+            return directories.SelectMany(a => a.GetFiles());
         }
 
         public IEnumerable<FileInfo> GetFiles(string path)
         {
             var directory = new DirectoryInfo(path);
-            return GetFiles(directory);
+            return directory.GetFiles("*.*", new EnumerationOptions { 
+                RecurseSubdirectories = true, 
+                IgnoreInaccessible = true });
         }
     }
 }

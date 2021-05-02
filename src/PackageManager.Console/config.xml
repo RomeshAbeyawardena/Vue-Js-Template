@@ -12,26 +12,27 @@
     <add enabled="true" name="Web">
       <files>
         <paths>
-          <add filter="src\**" from="src" to="App" />
-          <add filter="Pages\**" from="Pages" to="Pages" />
+          <add source="Templates\Web\App" to="App">
+            <path enabled="true" value="*.json" type="text" />
+            <path enabled="true" value="*.js" type="text" />
+            <path enabled="true" value="*.vue" type="text" />
+            <path enabled="true" value="*.scss" type="text" />
+          </add>
+          <add source="Templates\Web\Pages" to="Pages">
+            <path enabled="true" value="*.cs" type="C Sharp" />
+            <path enabled="true" value="*.cshtml" type="Razor" />
+          </add>
         </paths>
-        <extensions>
-          <add enabled="true" value="*.cs" type="C Sharp" />
-          <add enabled="true" value="*.cshtml" type="Razor" />
-          <add enabled="true" value="*.json" type="JSON" />
-          <add enabled="true" value="*.js" type="javascript" />
-          <add enabled="true" value="*.scss" type="SASS" />
-          <add enabled="true" value="*.vue" type="Vue page" />
-        </extensions>
       </files>
     </add>
   </outputs>
-  <consoles>
+  <console>
     <hosts>
       <add enabled="true" default="true" name="PowerShell" path="pwsh" arguments="-c {console.arguments}" />
     </hosts>
-  </consoles>
+  </console>
   <modules>
-    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />
+    <!--<add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />-->
+    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.TestModule" />
   </modules>
 </config>
