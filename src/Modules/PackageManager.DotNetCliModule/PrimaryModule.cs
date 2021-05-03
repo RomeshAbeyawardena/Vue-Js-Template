@@ -33,7 +33,7 @@ namespace PackageManager.DotNetCliModule
         {
             return Mediator
                .Send(new GetConfigurationCommandQuery { 
-                   Key = key 
+                   Key = key, 
                });
         }
 
@@ -142,13 +142,17 @@ namespace PackageManager.DotNetCliModule
             return false;
         }
 
-        private Task RunPackageManager(Command packageManagerCommand, 
+        private async Task RunPackageManager(Command packageManagerCommand, 
             string projectPath,
             CancellationToken cancellationToken)
         {
-            return Mediator.Send(new DispatchConsoleHostCommandQuery
+            var configurationFile = (await Mediator.Send(new GetConfigurationFilePathsQuery { 
+                Name = "Web", 
+                RequiresPackageManager = true }, cancellationToken)).First();
+
+            await Mediator.Send(new DispatchConsoleHostCommandQuery
             {
-                WorkingDirectory = projectPath,
+                WorkingDirectory = $"{projectPath}//{configurationFile.To}",
                 Arguments = packageManagerCommand.Value
             }, cancellationToken);
         }
