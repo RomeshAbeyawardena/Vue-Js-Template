@@ -1,11 +1,4 @@
-﻿using PackageManager.Shared.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PackageManager.Shared.Domain.Models
+﻿namespace PackageManager.Shared.Domain.Models
 {
     public class Command
     {

@@ -1,12 +1,8 @@
 ﻿using SystemConsole = System.Console;
 using Utility.CommandLine;
-using System.Xml;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System.Threading;
-using PackageManager.Shared.Abstractions;
-using PackageManager.Shared.Domain.Models;
 using PackageManager.Shared;
 using Microsoft.Extensions.Logging;
 using PackageManager.Core.Extensions;

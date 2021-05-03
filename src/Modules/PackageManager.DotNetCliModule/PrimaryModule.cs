@@ -5,7 +5,6 @@ using PackageManager.Shared.Base;
 using PackageManager.Shared.Domain.Models;
 using PackageManager.Shared.Extensions;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ namespace PackageManager.DotNetCliModule
         private const string ProjectTypeParameter = "{project.type}";
         private const string SolutionPathParameter = "{solution.path}";
         private const string ProjectPathParameter = "{project.path}";
-        private static string NewLine = Environment.NewLine;
+        private static readonly string NewLine = Environment.NewLine;
 
 
         private readonly IConfiguration configuration;
@@ -34,7 +33,7 @@ namespace PackageManager.DotNetCliModule
             return Mediator
                .Send(new GetConfigurationCommandQuery { 
                    Key = key, 
-               });
+               }, cancellationToken);
         }
 
         private Task CreateSolutionFile(Command projectAddCommand, 
@@ -126,7 +125,7 @@ namespace PackageManager.DotNetCliModule
             }
         }
 
-        private bool ProcessUserPromptToCopyWebRazorAndVueContentFiles(string type, string projectName)
+        private static bool ProcessUserPromptToCopyWebRazorAndVueContentFiles(string type, string projectName)
         {
             if (type.Equals("web", StringComparison.InvariantCultureIgnoreCase)
                     && projectName.EndsWith("Web", StringComparison.InvariantCultureIgnoreCase))
@@ -180,7 +179,6 @@ namespace PackageManager.DotNetCliModule
 
             await CreateSolutionFile(projectAddCommand, solutionDirectory, cancellationToken);
 
-            bool configureWebApplicationWithRazorandVue = false;
             foreach (var project in configuration.ProjectNames)
             {
                 var projectName = $"{configuration.SolutionName}.{project}";
@@ -189,7 +187,7 @@ namespace PackageManager.DotNetCliModule
                 Console.Write("{0}Enter project type for {1}: ", NewLine, projectName);
                 var type = Console.ReadLine();
 
-                configureWebApplicationWithRazorandVue = ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
+                var configureWebApplicationWithRazorandVue = ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
 
                 //Create project of specified type
                 await CreateProject(type, projectDirectory, projectAddCommand, cancellationToken);

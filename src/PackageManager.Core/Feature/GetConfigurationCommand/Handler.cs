@@ -3,9 +3,7 @@ using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Domain.Models;
 using PackageManager.Shared.Queries.GetConfigurationCommand;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
