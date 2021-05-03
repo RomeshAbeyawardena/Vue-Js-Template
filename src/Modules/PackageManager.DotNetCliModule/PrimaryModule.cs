@@ -123,6 +123,22 @@ namespace PackageManager.DotNetCliModule
             }
         }
 
+        private bool ProcessUserPromptToCopyWebRazorAndVueContentFiles(string type, string projectName)
+        {
+            if (type.Equals("web", StringComparison.InvariantCultureIgnoreCase)
+                    && projectName.EndsWith("Web", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Console.Write("Configure this web application with an empty razor + vue template? Y|Yes or N|No: ");
+                var response = Console.ReadLine();
+                return response.Equals("Yes",
+                                StringComparison.InvariantCultureIgnoreCase)
+                            || response.Equals("Y",
+                                StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            return false;
+        }
+
         public PrimaryModule(IConfiguration configuration,
             ILogger<PrimaryModule> logger,
             IMediator mediator)
@@ -138,7 +154,6 @@ namespace PackageManager.DotNetCliModule
 
         public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
-            
             var solutionAddProjectCommand = await GetCommandByKey("Solution.Add");
 
             var projectAddCommand = await GetCommandByKey("Project.Add");
@@ -156,16 +171,7 @@ namespace PackageManager.DotNetCliModule
                 Console.Write("\r\nEnter project type for {0}: ", projectName);
                 var type = Console.ReadLine();
 
-                if (type.Equals("web", StringComparison.InvariantCultureIgnoreCase) 
-                    && projectName.EndsWith("Web", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    Console.Write("Configure this web application with an empty razor + vue template? Y|Yes or N|No: ");
-                    var response = Console.ReadLine();
-                    configureWebApplicationWithRazorandVue = response.Equals("Yes", 
-                                StringComparison.InvariantCultureIgnoreCase) 
-                            || response.Equals("Y", 
-                                StringComparison.InvariantCultureIgnoreCase);
-                }
+                configureWebApplicationWithRazorandVue = ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
 
                 //Create project of specified type
                 await CreateProject(type, projectDirectory, projectAddCommand, cancellationToken);

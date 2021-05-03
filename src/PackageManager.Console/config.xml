@@ -6,6 +6,8 @@
       <add enabled="true" key="Solution.Add" value="dotnet sln {solution.path} add {project.path}" />
       <add enabled="true" key="Project.Add" value="dotnet new {project.type} -o {solution.path}" />
       <add enabled="true" key="Project.AddItem" value="dotnet new {project.type} -o {solution.path}" />
+      <add enabled="true" key="Npm.Install" value="npm install {project.path}" />
+      <add enabled="true" key="Yarn.Install" value="yarn" workingDirectory="{project.path}" />
     </commands>
   </build>
   <outputs>

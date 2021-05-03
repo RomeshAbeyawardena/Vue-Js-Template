@@ -18,6 +18,7 @@ namespace PackageManager.Shared.Extensions
                 var attributes = xmlNode.Attributes;
                 valueDictionary.Add(value,
                     attributes[value]?.Value
+                    ?? attributes[value.ToCamelCase()]?.Value
                     ?? attributes[value.ToLower()]?.Value
                     ?? attributes[value.ToUpper()]?.Value);
             }

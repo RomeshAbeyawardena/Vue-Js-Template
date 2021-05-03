@@ -24,12 +24,16 @@ namespace PackageManager.Shared
 
         public IConsoleHost DefaultConsoleHost => configuration.ConsoleHosts.Single(a => a.Default);
 
-        public Task Dispatch(IConsoleHost consoleHost, string arguments, CancellationToken cancellationToken)
+        public Task Dispatch(IConsoleHost consoleHost, string arguments, 
+            string workingDirectory = default, CancellationToken cancellationToken = default)
         {
-            const string consoleArgumentsParameter = "{console.arguments}";
             
-            var processStartInfo = new ProcessStartInfo(consoleHost.Path, consoleHost.Arguments
-                .Replace(consoleArgumentsParameter, arguments));
+            var processStartInfo = new ProcessStartInfo(consoleHost.Path, consoleHost.Arguments);
+
+            if (workingDirectory != null)
+            {
+                processStartInfo.WorkingDirectory = workingDirectory;
+            }
 
             logger.LogInformation("{0} {1}", processStartInfo.FileName, processStartInfo.Arguments);
 

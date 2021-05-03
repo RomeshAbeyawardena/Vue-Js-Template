@@ -25,5 +25,11 @@ namespace PackageManager.Shared.Extensions
                     .SelectMany(c => c.ToCharArray()))
                 .ToArray());
         }
+
+        public static string ToCamelCase(this string value)
+        {
+            return new string(value.Select((c, i) => i == 0 ? char.ToLower(c) : c)
+                .ToArray());
+        }
     }
 }
