@@ -18,6 +18,10 @@ namespace PackageManager.DotNetCliModule
 {
     public class PrimaryModule : ModuleBase
     {
+        private const string ProjectTypeParameter = "{project.type}";
+        private const string SolutionPathParameter = "{solution.path}";
+        private const string ProjectPathParameter = "{project.path}";
+
         private readonly IConfiguration configuration;
         
         private Task<Command> GetCommandByKey(string key)
@@ -26,6 +30,97 @@ namespace PackageManager.DotNetCliModule
                .Send(new GetConfigurationCommandQuery { 
                    Key = key 
                });
+        }
+
+        private Task CreateSolutionFile(Command projectAddCommand, 
+            string solutionDirectory, 
+            CancellationToken cancellationToken)
+        {
+            //Create new SLN file in solution directory
+            return Mediator.Send(new DispatchConsoleHostCommandQuery
+            {
+                Arguments = projectAddCommand.Value
+                .Replace(ProjectTypeParameter, "sln")
+                .Replace(SolutionPathParameter, solutionDirectory)
+            }, cancellationToken);
+        }
+
+        private Task CreateProject(string type,
+            string projectDirectory,  Command projectAddCommand, 
+            CancellationToken cancellationToken)
+        {
+            return Mediator.Send(new DispatchConsoleHostCommandQuery
+            {
+                Arguments = projectAddCommand.Value
+                        .Replace(ProjectTypeParameter, type)
+                        .Replace(SolutionPathParameter, projectDirectory)
+            }, cancellationToken);
+        }
+
+        private Task AddProjectToSolution(Command solutionAddProjectCommand,
+            string projectPath, string solutionDirectory, CancellationToken cancellationToken)
+        {
+            return Mediator.Send(new DispatchConsoleHostCommandQuery
+            {
+                Arguments = solutionAddProjectCommand.Value
+                        .Replace(ProjectPathParameter, projectPath)
+                        .Replace(SolutionPathParameter, $"{solutionDirectory}\\{configuration.SolutionName}.sln")
+            }, cancellationToken);
+        }
+
+        private async Task CopyStartupToWebProject(
+            string projectDirectory, string projectName,
+            CancellationToken cancellationToken)
+        {
+            var startupFilePath = $"{projectDirectory}\\Startup.cs";
+
+            await Mediator.Send(new CopyFileRequest
+            {
+                SourcePath = "Templates/Web/Startup.cs.txt",
+                DestinationPath = startupFilePath,
+                OverWriteFile = true
+            }, cancellationToken);
+
+            var text = System.IO.File.ReadAllText(startupFilePath);
+            //replace placeholder in copied filed
+            System.IO.File.WriteAllText(startupFilePath, text.Replace("{project.name}", projectName));
+        }
+
+        private async Task CopyContentFilesToWebProject(string projectPath, 
+            CancellationToken cancellationToken)
+        {
+            var filePaths = await Mediator.Send(
+                        new GetConfigurationFilePathsQuery
+                        {
+                            Name = "Web"
+                        },
+                        cancellationToken);
+
+            foreach (var filePath in filePaths)
+            {
+                var files = await Mediator
+                    .Send(new GetFilesQuery
+                    {
+                        FilePath = filePath.Source,
+                        ExtensionDelimiter = ',',
+                        Extensions = filePath.FileExtensions
+                    },
+                        cancellationToken);
+
+                foreach (var file in files.Files)
+                {
+                    var relativeFilePath = filePath.To.Concat(file.FullName
+                        .Replace(files.Directory.FullName, string.Empty));
+
+                    await Mediator.Send(new CopyFileRequest
+                    {
+                        CreateSubDirectories = true,
+                        SourcePath = file.FullName,
+                        DestinationPath = $"{projectPath}\\{relativeFilePath}",
+                        OverWriteFile = true
+                    }, cancellationToken);
+                }
+            }
         }
 
         public PrimaryModule(IConfiguration configuration,
@@ -43,23 +138,14 @@ namespace PackageManager.DotNetCliModule
 
         public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
-            const string projectTypeParameter = "{project.type}";
-            const string solutionPathParameter = "{solution.path}";
-            const string projectPathParameter = "{project.path}";
-
+            
             var solutionAddProjectCommand = await GetCommandByKey("Solution.Add");
 
             var projectAddCommand = await GetCommandByKey("Project.Add");
 
             var solutionDirectory = $"{configuration.Output}\\{configuration.SolutionName}";
 
-            //Create new SLN file in solution directory
-            await Mediator.Send(new DispatchConsoleHostCommandQuery
-            {
-                Arguments = projectAddCommand.Value
-                .Replace(projectTypeParameter, "sln")
-                .Replace(solutionPathParameter, solutionDirectory)
-            }, cancellationToken);
+            await CreateSolutionFile(projectAddCommand, solutionDirectory, cancellationToken);
 
             bool configureWebApplicationWithRazorandVue = false;
             foreach (var project in configuration.ProjectNames)
@@ -73,7 +159,7 @@ namespace PackageManager.DotNetCliModule
                 if (type.Equals("web", StringComparison.InvariantCultureIgnoreCase) 
                     && projectName.EndsWith("Web", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Console.Write("Configure this web application with an empty razor + vue template? Y|Yes or N|No");
+                    Console.Write("Configure this web application with an empty razor + vue template? Y|Yes or N|No: ");
                     var response = Console.ReadLine();
                     configureWebApplicationWithRazorandVue = response.Equals("Yes", 
                                 StringComparison.InvariantCultureIgnoreCase) 
@@ -82,65 +168,18 @@ namespace PackageManager.DotNetCliModule
                 }
 
                 //Create project of specified type
-                await Mediator.Send(new DispatchConsoleHostCommandQuery
-                {
-                    Arguments = projectAddCommand.Value
-                        .Replace(projectTypeParameter, type)
-                        .Replace(solutionPathParameter, projectDirectory)
-                }, cancellationToken);
+                await CreateProject(type, projectDirectory, projectAddCommand, cancellationToken);
 
                 //Add project to solution
-                await Mediator.Send(new DispatchConsoleHostCommandQuery
-                {
-                    Arguments = solutionAddProjectCommand.Value
-                        .Replace(projectPathParameter, projectPath)
-                        .Replace(solutionPathParameter, $"{solutionDirectory}\\{configuration.SolutionName}.sln")
-                }, cancellationToken);
+                await AddProjectToSolution(solutionAddProjectCommand, projectPath, 
+                    solutionDirectory, cancellationToken);
 
                 if (configureWebApplicationWithRazorandVue)
                 {
                     //Copy startup.cs from template directory
-                    var startupFilePath = $"{projectDirectory}\\Startup.cs";
-                    
-                    await Mediator.Send(new CopyFileRequest { 
-                        SourcePath = "Templates/Web/Startup.cs.txt",
-                        DestinationPath = startupFilePath,
-                        OverWriteFile = true
-                    });
+                    await CopyStartupToWebProject(projectDirectory, projectName, cancellationToken);
 
-                    var text = System.IO.File.ReadAllText(startupFilePath);
-                    //replace placeholder in copied filed
-                    System.IO.File.WriteAllText(startupFilePath, text.Replace("{project.name}", projectName));
-
-
-                    //get outputs from configuration
-                    var filePaths = await Mediator.Send(
-                        new GetConfigurationFilePathsQuery { 
-                            Name = "Web" }, 
-                        cancellationToken);
-
-                    foreach (var filePath in filePaths)
-                    {
-                        var files = await Mediator
-                            .Send(new GetFilesQuery { 
-                                FilePath = filePath.Source, 
-                                ExtensionDelimiter = ',', 
-                                Extensions = filePath.FileExtensions }, 
-                                cancellationToken);
-
-                        foreach (var file in files.Files)
-                        {
-                            var relativeFilePath = filePath.To.Concat(file.FullName.Replace(files.Directory.FullName, string.Empty));
-
-                            await Mediator.Send(new CopyFileRequest { 
-                                CreateSubDirectories = true,
-                                SourcePath = file.FullName, 
-                                DestinationPath = $"{solutionDirectory}\\{relativeFilePath}", 
-                                OverWriteFile = true }, cancellationToken);
-                        }
-                    }
-
-                    //webOutputs.FileExtensions.Select(a => a.Value);
+                    await CopyContentFilesToWebProject(projectPath, cancellationToken);
                 }
             }
 
