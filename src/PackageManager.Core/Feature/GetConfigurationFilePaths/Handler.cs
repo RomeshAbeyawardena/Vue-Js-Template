@@ -25,7 +25,8 @@ namespace PackageManager.Core.Feature.GetConfigurationFilePaths
             return Task.FromResult(configuration
                 .Outputs.FirstOrDefault(a => a.Name.Equals(request.Name, 
                     StringComparison.InvariantCultureIgnoreCase))
-                        .Files);
+                        .Files.Where(a => !request.RequiresPackageManager.HasValue 
+                            || a.RequiresPackageManager == request.RequiresPackageManager.Value));
         }
     }
 }

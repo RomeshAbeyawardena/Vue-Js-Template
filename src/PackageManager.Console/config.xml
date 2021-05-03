@@ -14,7 +14,7 @@
     <add enabled="true" name="Web">
       <files>
         <paths>
-          <add source="Templates\Web\App" to="App">
+          <add source="Templates\Web\App" to="App" requiresPackageManager="true">
             <extension enabled="true" value="*.json" type="text" />
             <extension enabled="true" value="*.js" type="text" />
             <extension enabled="true" value="*.vue" type="text" />

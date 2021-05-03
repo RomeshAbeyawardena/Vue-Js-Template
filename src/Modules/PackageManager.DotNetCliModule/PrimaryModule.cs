@@ -14,6 +14,8 @@ using DispatchConsoleHostCommandQuery = PackageManager.Shared.Queries.DispatchCo
 using GetConfigurationFilePathsQuery = PackageManager.Shared.Queries.GetConfigurationFilePaths.Query;
 using GetFilesQuery = PackageManager.Shared.Queries.GetFiles.Query;
 using CopyFileRequest = PackageManager.Shared.Queries.CopyFile.Request;
+using PackageManager.Shared;
+
 namespace PackageManager.DotNetCliModule
 {
     public class PrimaryModule : ModuleBase
@@ -26,7 +28,8 @@ namespace PackageManager.DotNetCliModule
 
         private readonly IConfiguration configuration;
         
-        private Task<Command> GetCommandByKey(string key)
+        private Task<Command> GetCommandByKey(string key,
+            CancellationToken cancellationToken)
         {
             return Mediator
                .Send(new GetConfigurationCommandQuery { 
@@ -140,12 +143,12 @@ namespace PackageManager.DotNetCliModule
         }
 
         private Task RunPackageManager(Command packageManagerCommand, 
-            string projectFolder,
+            string projectPath,
             CancellationToken cancellationToken)
         {
             return Mediator.Send(new DispatchConsoleHostCommandQuery
             {
-                WorkingDirectory = projectFolder,
+                WorkingDirectory = projectPath,
                 Arguments = packageManagerCommand.Value
             }, cancellationToken);
         }
@@ -165,9 +168,9 @@ namespace PackageManager.DotNetCliModule
 
         public override async Task<bool> RunAsync(CancellationToken cancellationToken)
         {
-            var solutionAddProjectCommand = await GetCommandByKey("Solution.Add");
+            var solutionAddProjectCommand = await GetCommandByKey("Solution.Add", cancellationToken);
 
-            var projectAddCommand = await GetCommandByKey("Project.Add");
+            var projectAddCommand = await GetCommandByKey("Project.Add", cancellationToken);
 
             var solutionDirectory = $"{configuration.Output}\\{configuration.SolutionName}";
 
@@ -198,12 +201,12 @@ namespace PackageManager.DotNetCliModule
 
                     await CopyContentFilesToWebProject(projectPath, cancellationToken);
 
-                    ConsoleKey userSelection = default;
-                    var validUserInput = new[] { ConsoleKey.D1, ConsoleKey.NumPad1 };
-
-                    bool IsValid = validUserInput.Any(a => a == userSelection);
-
-                    while (!IsValid)
+                    char userSelection = default;
+                    var commandNameDictionaryBuilder = DictionaryBuilder.Create<char, string>()
+                        .Add('1', "Npm.Install")
+                        .Add('2', "Yarn.Install");
+                    string commandName;
+                    while (!commandNameDictionaryBuilder.TryGetValue(userSelection, out commandName))
                     {
                         if(userSelection != default)
                         {
@@ -211,9 +214,14 @@ namespace PackageManager.DotNetCliModule
                         }
 
                         Console.WriteLine("Which package manager should be used for client files?");
-                        Console.Write($"\t 1. NPM{NewLine}\t2. Yarn{NewLine}{NewLine}Please select:\t");
-                        userSelection = Console.ReadKey().Key;
+                        Console.Write($"\t 1. NPM{NewLine}" +
+                            $"\t2. Yarn{NewLine}{NewLine}Please select:\t");
+                        userSelection = Console.ReadKey().KeyChar;
                     }
+
+                    var packageManagerCommand = await GetCommandByKey(commandName, cancellationToken);
+
+                    await RunPackageManager(packageManagerCommand, projectPath, cancellationToken);
                 }
             }
 

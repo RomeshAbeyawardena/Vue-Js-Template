@@ -11,5 +11,6 @@ namespace PackageManager.Shared.Abstractions
     {
         IDictionaryBuilder<TKey, TValue> Add(KeyValuePair<TKey, TValue> keyValue);
         IDictionaryBuilder<TKey, TValue> Add(TKey key, TValue value);
+        IDictionary<TKey, TValue> Dictionary { get; }
     }
 }

@@ -9,7 +9,16 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Shared
 {
-    public class DictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, TValue>
+    public static class DictionaryBuilder
+    {
+        public static IDictionaryBuilder<TKey, TValue> Create<TKey, TValue>(IDictionary<TKey, TValue> dictionary = default)
+        {
+            return new DictionaryBuilder<TKey, TValue>(dictionary);
+        }
+    }
+
+    public class DictionaryBuilder<TKey, TValue> 
+        : IDictionaryBuilder<TKey, TValue>
     {
         private readonly IDictionary<TKey, TValue> dictionary;
 
@@ -56,5 +65,7 @@ namespace PackageManager.Shared
         {
             return dictionary.GetEnumerator();
         }
+
+        public IDictionary<TKey, TValue> Dictionary => dictionary;
     }
 }

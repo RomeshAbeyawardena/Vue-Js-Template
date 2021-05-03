@@ -11,5 +11,6 @@ namespace PackageManager.Shared.Queries.GetConfigurationFilePaths
     public class Query : IRequest<IEnumerable<File>>
     {
         public string Name { get; set; }
+        public bool? RequiresPackageManager { get; set; }
     }
 }
