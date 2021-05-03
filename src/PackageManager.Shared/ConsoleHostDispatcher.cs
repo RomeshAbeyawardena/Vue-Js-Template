@@ -27,8 +27,8 @@ namespace PackageManager.Shared
         public Task Dispatch(IConsoleHost consoleHost, string arguments, 
             string workingDirectory = default, CancellationToken cancellationToken = default)
         {
-            
-            var processStartInfo = new ProcessStartInfo(consoleHost.Path, consoleHost.Arguments);
+            const string consoleArgumentsParameter = "{console.arguments}";
+            var processStartInfo = new ProcessStartInfo(consoleHost.Path, consoleHost.Arguments.Replace(consoleArgumentsParameter, arguments));
 
             if (workingDirectory != null)
             {

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PackageManager.Shared.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,11 @@ namespace PackageManager.Shared.Queries.DispatchConsoleHostCommand
 {
     public class Query : IRequest
     {
-        public Query(Action<IDictionary<string, string>> action = default)
+        public Query(Action<IDictionaryBuilder<string, string>> action = default)
         {
             Parameters = new Dictionary<string, string>();
-            action?.Invoke(Parameters);
+            var dictionaryBuilder = new DictionaryBuilder<string, string>(Parameters);
+            action?.Invoke(dictionaryBuilder);
         }
 
         public string Key { get; set; }

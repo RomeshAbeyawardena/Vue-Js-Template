@@ -21,6 +21,8 @@ namespace PackageManager.DotNetCliModule
         private const string ProjectTypeParameter = "{project.type}";
         private const string SolutionPathParameter = "{solution.path}";
         private const string ProjectPathParameter = "{project.path}";
+        private static string NewLine = Environment.NewLine;
+
 
         private readonly IConfiguration configuration;
         
@@ -168,7 +170,7 @@ namespace PackageManager.DotNetCliModule
                 var projectName = $"{configuration.SolutionName}.{project}";
                 var projectPath = $"{solutionDirectory}\\{projectName}\\";
                 var projectDirectory = $"{solutionDirectory}\\{projectName}";
-                Console.Write("\r\nEnter project type for {0}: ", projectName);
+                Console.Write("{0}Enter project type for {1}: ", NewLine, projectName);
                 var type = Console.ReadLine();
 
                 configureWebApplicationWithRazorandVue = ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
@@ -186,6 +188,23 @@ namespace PackageManager.DotNetCliModule
                     await CopyStartupToWebProject(projectDirectory, projectName, cancellationToken);
 
                     await CopyContentFilesToWebProject(projectPath, cancellationToken);
+
+                    ConsoleKey userSelection = default;
+                    var validUserInput = new[] { ConsoleKey.D1, ConsoleKey.NumPad1 };
+
+                    bool IsValid = validUserInput.Any(a => a == userSelection);
+
+                    while (!IsValid)
+                    {
+                        if(userSelection != default)
+                        {
+                            Console.WriteLine($"Invalid user input.{NewLine}");
+                        }
+
+                        Console.WriteLine("Which package manager should be used for client files?");
+                        Console.Write($"\t 1. NPM{NewLine}\t2. Yarn{NewLine}{NewLine}Please select:\t");
+                        userSelection = Console.ReadKey().Key;
+                    }
                 }
             }
 
