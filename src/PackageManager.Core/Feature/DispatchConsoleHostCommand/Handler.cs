@@ -34,7 +34,8 @@ namespace PackageManager.Core.Feature.DispatchConsoleHostCommand
                 request.WorkingDirectory = request.WorkingDirectory?.Replace(key, value);
             }
 
-            await consoleHostDispatcher.Dispatch(consoleHost, request.Arguments, request.WorkingDirectory, cancellationToken);
+            await consoleHostDispatcher.Dispatch(consoleHost, request.Arguments, 
+                request.WorkingDirectory, cancellationToken);
 
             return Unit.Value;
         }

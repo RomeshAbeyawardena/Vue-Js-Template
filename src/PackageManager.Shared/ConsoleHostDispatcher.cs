@@ -28,7 +28,8 @@ namespace PackageManager.Shared
             string workingDirectory = default, CancellationToken cancellationToken = default)
         {
             const string consoleArgumentsParameter = "{console.arguments}";
-            var processStartInfo = new ProcessStartInfo(consoleHost.Path, consoleHost.Arguments.Replace(consoleArgumentsParameter, arguments));
+            var processStartInfo = new ProcessStartInfo(consoleHost.Path, consoleHost.Arguments
+                .Replace(consoleArgumentsParameter, arguments));
 
             if (workingDirectory != null)
             {

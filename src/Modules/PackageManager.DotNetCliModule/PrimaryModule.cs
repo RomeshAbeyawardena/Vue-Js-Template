@@ -39,35 +39,33 @@ namespace PackageManager.DotNetCliModule
             CancellationToken cancellationToken)
         {
             //Create new SLN file in solution directory
-            return Mediator.Send(new DispatchConsoleHostCommandQuery
-            {
-                Arguments = projectAddCommand.Value
-                .Replace(ProjectTypeParameter, "sln")
-                .Replace(SolutionPathParameter, solutionDirectory)
-            }, cancellationToken);
+            return Mediator.Send(new DispatchConsoleHostCommandQuery(a => a
+                .Add(ProjectTypeParameter, "sln")
+                .Add(SolutionPathParameter, solutionDirectory)) {
+                    Arguments = projectAddCommand.Value
+                }, cancellationToken);
         }
 
         private Task CreateProject(string type,
             string projectDirectory,  Command projectAddCommand, 
             CancellationToken cancellationToken)
         {
-            return Mediator.Send(new DispatchConsoleHostCommandQuery
-            {
-                Arguments = projectAddCommand.Value
-                        .Replace(ProjectTypeParameter, type)
-                        .Replace(SolutionPathParameter, projectDirectory)
-            }, cancellationToken);
+            return Mediator.Send(new DispatchConsoleHostCommandQuery(a => a
+                .Add(ProjectTypeParameter, type)
+                .Add(SolutionPathParameter, projectDirectory)) {
+                    Arguments = projectAddCommand.Value
+                }, cancellationToken);
         }
 
         private Task AddProjectToSolution(Command solutionAddProjectCommand,
             string projectPath, string solutionDirectory, CancellationToken cancellationToken)
         {
-            return Mediator.Send(new DispatchConsoleHostCommandQuery
-            {
-                Arguments = solutionAddProjectCommand.Value
-                        .Replace(ProjectPathParameter, projectPath)
-                        .Replace(SolutionPathParameter, $"{solutionDirectory}\\{configuration.SolutionName}.sln")
-            }, cancellationToken);
+            return Mediator.Send(new DispatchConsoleHostCommandQuery(a => a
+                .Add(ProjectPathParameter, projectPath)
+                .Add(SolutionPathParameter, 
+                        $"{solutionDirectory}\\{configuration.SolutionName}.sln")) {
+                    Arguments = solutionAddProjectCommand.Value
+                }, cancellationToken);
         }
 
         private async Task CopyStartupToWebProject(
@@ -141,6 +139,17 @@ namespace PackageManager.DotNetCliModule
             return false;
         }
 
+        private Task RunPackageManager(Command packageManagerCommand, 
+            string projectFolder,
+            CancellationToken cancellationToken)
+        {
+            return Mediator.Send(new DispatchConsoleHostCommandQuery
+            {
+                WorkingDirectory = projectFolder,
+                Arguments = packageManagerCommand.Value
+            }, cancellationToken);
+        }
+
         public PrimaryModule(IConfiguration configuration,
             ILogger<PrimaryModule> logger,
             IMediator mediator)
@@ -198,7 +207,7 @@ namespace PackageManager.DotNetCliModule
                     {
                         if(userSelection != default)
                         {
-                            Console.WriteLine($"Invalid user input.{NewLine}");
+                            Console.WriteLine($"{NewLine}Invalid selection.{NewLine}");
                         }
 
                         Console.WriteLine("Which package manager should be used for client files?");
