@@ -54,6 +54,6 @@ namespace PackageManager.Console
                     projectNamesList, XmlConfigurationPath));
         }
 
-        static readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        static readonly CancellationTokenSource cancellationTokenSource = new();
     }
 }

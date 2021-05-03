@@ -9,12 +9,14 @@ namespace PackageManager.Shared.Base
     public abstract class ModuleBase : IModule
     {
         protected ModuleBase(ILogger logger,
+            ISystemConsole systemConsole,
             IConfiguration configuration,
             IMediator mediator)
         {
             Configuration = configuration;
             Mediator = mediator;
             Logger = logger;
+            Console = systemConsole;
         }
 
         public abstract Task<bool> RunAsync(CancellationToken cancellationToken);
@@ -30,7 +32,8 @@ namespace PackageManager.Shared.Base
             return ValueTask.CompletedTask;
         }
 
-        protected ILogger Logger { get; }
+        public ISystemConsole Console { get;  }
+        public ILogger Logger { get; }
         public IConfiguration Configuration { get; }
         public IMediator Mediator { get; }
     }

@@ -15,8 +15,11 @@ namespace PackageManager.DotNetCliModule
         private readonly ILogger<TestModule> logger;
 
         public TestModule(IConfiguration configuration,
+            ISystemConsole systemConsole,
             IMediator mediator,
-            ILogger<TestModule> logger) : base(logger, configuration, mediator)
+            ILogger<TestModule> logger) 
+            : base(logger, systemConsole, 
+                   configuration, mediator)
         {
             this.logger = logger;
         }

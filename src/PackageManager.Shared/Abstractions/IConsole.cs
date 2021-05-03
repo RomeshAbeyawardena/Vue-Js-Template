@@ -9,7 +9,9 @@ namespace PackageManager.Shared.Abstractions
     public interface IConsole<TConsoleReadInfo>
     {
         string ReadLine();
-        TConsoleReadInfo Read(bool bypass);
+        TConsoleReadInfo Read(bool bypass = false);
+
+        void ClearParametersDictionary();
         void Write(string value);
         void WriteLine(string value);
 

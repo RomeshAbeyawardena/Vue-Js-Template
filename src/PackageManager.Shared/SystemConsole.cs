@@ -1,4 +1,5 @@
 ﻿using PackageManager.Shared.Abstractions;
+using PackageManager.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +8,28 @@ using System.Threading.Tasks;
 
 namespace PackageManager.Shared
 {
-    public class SystemConsole : IConsole<ConsoleKeyInfo>
+    public class SystemConsole : ISystemConsole, IConsole<ConsoleKeyInfo>
     {
+        private readonly IDictionaryBuilder<string, string> dictionaryBuilder;
+        private readonly IDictionary<string, string> parameterDictionary;
+        private string ReplaceValues(string value, 
+            Action<IDictionaryBuilder<string, string>> builder)
+        {
+            builder?.Invoke(dictionaryBuilder);
+
+            return value.Format(dictionaryBuilder);
+        }
+
         public SystemConsole()
         {
-
+            parameterDictionary = new Dictionary<string, string>();
+            dictionaryBuilder = DictionaryBuilder
+                .Create(parameterDictionary);
         }
 
         public ConsoleKeyInfo Read(bool bypass)
         {
-            return Console.ReadKey();
+            return Console.ReadKey(bypass);
         }
 
         public string ReadLine()
@@ -29,9 +42,10 @@ namespace PackageManager.Shared
             Console.Write(value);
         }
 
-        public void Write(string value, Action<IDictionaryBuilder<string, string>> builder)
+        public void Write(string value,
+            Action<IDictionaryBuilder<string, string>> builder)
         {
-            throw new NotImplementedException();
+            Write(ReplaceValues(value, builder));
         }
 
         public void WriteLine(string value)
@@ -39,9 +53,15 @@ namespace PackageManager.Shared
             Console.WriteLine(value);
         }
 
-        public void WriteLine(string value, Action<IDictionaryBuilder<string, string>> builder)
+        public void WriteLine(string value, 
+            Action<IDictionaryBuilder<string, string>> builder)
         {
-            throw new NotImplementedException();
+            WriteLine(ReplaceValues(value, builder));
+        }
+
+        public void ClearParametersDictionary()
+        {
+            parameterDictionary.Clear();
         }
     }
 }

@@ -24,7 +24,6 @@ namespace PackageManager.DotNetCliModule
         private const string ProjectPathParameter = "{project.path}";
         private static readonly string NewLine = Environment.NewLine;
 
-
         private readonly IConfiguration configuration;
         
         private Task<Command> GetCommandByKey(string key,
@@ -125,7 +124,7 @@ namespace PackageManager.DotNetCliModule
             }
         }
 
-        private static bool ProcessUserPromptToCopyWebRazorAndVueContentFiles(string type, string projectName)
+        private bool ProcessUserPromptToCopyWebRazorAndVueContentFiles(string type, string projectName)
         {
             if (type.Equals("web", StringComparison.InvariantCultureIgnoreCase)
                     && projectName.EndsWith("Web", StringComparison.InvariantCultureIgnoreCase))
@@ -157,9 +156,10 @@ namespace PackageManager.DotNetCliModule
         }
 
         public PrimaryModule(IConfiguration configuration,
+            ISystemConsole systemConsole,
             ILogger<PrimaryModule> logger,
             IMediator mediator)
-            : base(logger, configuration, mediator)
+            : base(logger, systemConsole, configuration, mediator)
         {
             this.configuration = configuration;
         }
@@ -219,7 +219,7 @@ namespace PackageManager.DotNetCliModule
                         Console.WriteLine("Which package manager should be used for client files?");
                         Console.Write($"\t 1. NPM{NewLine}" +
                             $"\t2. Yarn{NewLine}{NewLine}Please select:\t");
-                        userSelection = Console.ReadKey().KeyChar;
+                        userSelection = Console.Read().KeyChar;
                     }
 
                     var packageManagerCommand = await GetCommandByKey(commandName, cancellationToken);

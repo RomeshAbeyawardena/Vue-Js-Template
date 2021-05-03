@@ -14,6 +14,8 @@ namespace PackageManager.Core.Extensions
             Action<ILoggingBuilder> buildLoggerFactory)
         {
             return services
+                .AddSingleton<IConsole<ConsoleKeyInfo>, SystemConsole>()
+                .AddSingleton<ISystemConsole, SystemConsole>()
                 .AddMediatR(typeof(ServiceCollectionExtensions).Assembly)
                 .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
                 .AddSingleton(serviceProvider => LoggerFactory.Create(buildLoggerFactory))
