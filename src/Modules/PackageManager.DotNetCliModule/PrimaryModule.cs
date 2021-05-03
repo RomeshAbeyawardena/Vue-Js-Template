@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using PackageManager.Shared;
 using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Base;
 using PackageManager.Shared.Domain.Models;
@@ -13,7 +14,6 @@ using DispatchConsoleHostCommandQuery = PackageManager.Shared.Queries.DispatchCo
 using GetConfigurationFilePathsQuery = PackageManager.Shared.Queries.GetConfigurationFilePaths.Query;
 using GetFilesQuery = PackageManager.Shared.Queries.GetFiles.Query;
 using CopyFileRequest = PackageManager.Shared.Queries.CopyFile.Request;
-using PackageManager.Shared;
 
 namespace PackageManager.DotNetCliModule
 {
@@ -184,10 +184,11 @@ namespace PackageManager.DotNetCliModule
                 var projectName = $"{configuration.SolutionName}.{project}";
                 var projectPath = $"{solutionDirectory}\\{projectName}\\";
                 var projectDirectory = $"{solutionDirectory}\\{projectName}";
-                Console.Write("{0}Enter project type for {1}: ", NewLine, projectName);
+                Console.Write($"{NewLine}Enter project type for {projectName}: ");
                 var type = Console.ReadLine();
 
-                var configureWebApplicationWithRazorandVue = ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
+                var configureWebApplicationWithRazorandVue = 
+                    ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
 
                 //Create project of specified type
                 await CreateProject(type, projectDirectory, projectAddCommand, cancellationToken);

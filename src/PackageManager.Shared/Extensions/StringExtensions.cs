@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PackageManager.Shared.Extensions
 {
@@ -12,6 +13,16 @@ namespace PackageManager.Shared.Extensions
         public static string Format(this string value, params object[] args)
         {
             return string.Format(value, args);
+        }
+
+        public static string Format(this string value, IDictionary<string, string> replacementKeyValues)
+        {
+            foreach(var (key, val) in replacementKeyValues)
+            {
+                value = value.Replace(key, val);
+            }
+
+            return value;
         }
 
         public static string Concat(this string value, params string[] values)
