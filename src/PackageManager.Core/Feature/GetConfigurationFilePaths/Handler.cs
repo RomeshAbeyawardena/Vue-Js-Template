@@ -23,7 +23,9 @@ namespace PackageManager.Core.Feature.GetConfigurationFilePaths
         public Task<IEnumerable<File>> Handle(Query request, CancellationToken cancellationToken)
         {
             return Task.FromResult(configuration
-                .Outputs.FirstOrDefault(a => a.Name == request.Name).Files);
+                .Outputs.FirstOrDefault(a => a.Name.Equals(request.Name, 
+                    StringComparison.InvariantCultureIgnoreCase))
+                        .Files);
         }
     }
 }

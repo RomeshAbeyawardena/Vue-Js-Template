@@ -17,5 +17,13 @@ namespace PackageManager.Shared.Extensions
         {
             return string.Format(value, args);
         }
+
+        public static string Concat(this string value, params string[] values)
+        {
+            return new string(Enumerable
+                .Concat(value.ToCharArray(), values
+                    .SelectMany(c => c.ToCharArray()))
+                .ToArray());
+        }
     }
 }

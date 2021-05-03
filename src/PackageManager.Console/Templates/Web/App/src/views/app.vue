@@ -5,6 +5,10 @@
     import Vue from 'vue';
 
     Vue.extend({
-        element: "#app"
+        data: function () {
+            return {
+                message: "Hello World"
+            }
+        }
     });
 </script>

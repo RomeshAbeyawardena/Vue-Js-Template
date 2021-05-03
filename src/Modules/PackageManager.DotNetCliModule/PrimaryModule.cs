@@ -10,6 +10,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GetConfigurationCommandQuery = PackageManager.Shared.Queries.GetConfigurationCommand.Query;
+using DispatchConsoleHostCommandQuery = PackageManager.Shared.Queries.DispatchConsoleHostCommand.Query;
+using GetConfigurationFilePathsQuery = PackageManager.Shared.Queries.GetConfigurationFilePaths.Query;
+using GetFilesQuery = PackageManager.Shared.Queries.GetFiles.Query;
 
 namespace PackageManager.DotNetCliModule
 {
@@ -48,11 +51,10 @@ namespace PackageManager.DotNetCliModule
 
             var projectAddCommand = await GetCommandByKey("Project.Add");
 
-            var solutionAddCommand = await GetCommandByKey("Solution.Add");
-
             var solutionDirectory = $"{configuration.Output}\\{configuration.SolutionName}";
 
-            await Mediator.Send(new Shared.Queries.DispatchConsoleHostCommand.Query
+            //Create new SLN file in solution directory
+            await Mediator.Send(new DispatchConsoleHostCommandQuery
             {
                 Arguments = projectAddCommand.Value
                 .Replace(projectTypeParameter, "sln")
@@ -79,14 +81,16 @@ namespace PackageManager.DotNetCliModule
                                 StringComparison.InvariantCultureIgnoreCase);
                 }
 
-                await Mediator.Send(new Shared.Queries.DispatchConsoleHostCommand.Query
+                //Create project of specified type
+                await Mediator.Send(new DispatchConsoleHostCommandQuery
                 {
                     Arguments = projectAddCommand.Value
                         .Replace(projectTypeParameter, type)
                         .Replace(solutionPathParameter, projectDirectory)
                 }, cancellationToken);
 
-                await Mediator.Send(new Shared.Queries.DispatchConsoleHostCommand.Query
+                //Add project to solution
+                await Mediator.Send(new DispatchConsoleHostCommandQuery
                 {
                     Arguments = solutionAddProjectCommand.Value
                         .Replace(projectPathParameter, projectPath)
@@ -95,15 +99,37 @@ namespace PackageManager.DotNetCliModule
 
                 if (configureWebApplicationWithRazorandVue)
                 {
+                    //Copy startup.cs from template directory
                     var startupFilePath = $"{projectDirectory}\\Startup.cs";
-                    System.IO.File.Copy("Templates/Web/Startup.cs.txt", startupFilePath, true);
-                    var text = System.IO.File.ReadAllText(startupFilePath);
+                    
+                    await Mediator.Send(new Shared.Queries.CopyFile.Request { 
+                        SourcePath = "Templates/Web/Startup.cs.txt",
+                        DestinationPath = startupFilePath,
+                        OverWriteFile = true
+                    });
 
+                    var text = System.IO.File.ReadAllText(startupFilePath);
+                    //replace placeholder in copied filed
                     System.IO.File.WriteAllText(startupFilePath, text.Replace("{project.name}", projectName));
 
-                    var webOutputs = configuration.Outputs.First(o => o.Name == "Web");
-                    var di = new System.IO.DirectoryInfo("Templates/Web/App");
-                    di.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+
+                    //get outputs from configuration
+                    var filePaths = await Mediator.Send(
+                        new GetConfigurationFilePathsQuery { 
+                            Name = "Web" }, 
+                        cancellationToken);
+
+                    foreach (var filePath in filePaths)
+                    {
+                        var files = await Mediator
+                            .Send(new GetFilesQuery { 
+                                FilePath = filePath.Source, 
+                                ExtensionDelimiter = ',', 
+                                Extensions = filePath.FileExtensions }, 
+                                cancellationToken);    
+
+                        
+                    }
 
                     //webOutputs.FileExtensions.Select(a => a.Value);
                 }

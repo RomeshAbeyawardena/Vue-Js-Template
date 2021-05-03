@@ -10,6 +10,6 @@ namespace PackageManager.Shared.Abstractions
     public interface IFileProvider
     {
         IEnumerable<FileInfo> GetFiles(DirectoryInfo directory);
-        IEnumerable<FileInfo> GetFiles(string path, string extensions, char delimiter);
+        IEnumerable<FileInfo> GetFiles(DirectoryInfo directoryInfo, IEnumerable<string> extensions, char delimiter);
     }
 }

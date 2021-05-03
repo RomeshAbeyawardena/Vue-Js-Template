@@ -21,22 +21,19 @@ namespace PackageManager.Shared
             return directories.SelectMany(a => a.GetFiles());
         }
 
-        public IEnumerable<FileInfo> GetFiles(string path, string extensions, char delimiter)
+        public IEnumerable<FileInfo> GetFiles(DirectoryInfo directoryInfo, IEnumerable<string> extensions, char delimiter)
         {
-            var extensionList = extensions
-                .Split(delimiter, StringSplitOptions.RemoveEmptyEntries)
-                .Select(a => a.Trim('*'));
-
+            
             var fileList = new List<FileInfo>();
-            var directories = Directory.EnumerateDirectories(path, "*", SearchOption.AllDirectories);
+            var directories = Directory.EnumerateDirectories(directoryInfo.FullName, "*", SearchOption.AllDirectories);
             foreach (var directory in directories)
             {
-                var directoryInfo = new DirectoryInfo(directory);
+                var currentDirectoryInfo = new DirectoryInfo(directory);
 
-                fileList.AddRange(FilterFiles(extensionList, directoryInfo.GetFiles()));
+                fileList.AddRange(FilterFiles(extensions, currentDirectoryInfo.GetFiles()));
             }
 
-            fileList.AddRange(FilterFiles(extensionList, new DirectoryInfo(path).GetFiles()));
+            fileList.AddRange(FilterFiles(extensions, directoryInfo.GetFiles()));
 
             return fileList;
         }
