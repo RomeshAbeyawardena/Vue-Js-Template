@@ -32,7 +32,7 @@
     </hosts>
   </console>
   <modules>
-    <!--<add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />-->
-    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.TestModule" />
+    <add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.PrimaryModule" />
+    <!--<add enabled="true" assembly="PackageManager.DotNetCliModule" type="PackageManager.DotNetCliModule.TestModule" />-->
   </modules>
 </config>

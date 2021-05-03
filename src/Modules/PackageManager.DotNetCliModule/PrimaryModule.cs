@@ -13,7 +13,7 @@ using GetConfigurationCommandQuery = PackageManager.Shared.Queries.GetConfigurat
 using DispatchConsoleHostCommandQuery = PackageManager.Shared.Queries.DispatchConsoleHostCommand.Query;
 using GetConfigurationFilePathsQuery = PackageManager.Shared.Queries.GetConfigurationFilePaths.Query;
 using GetFilesQuery = PackageManager.Shared.Queries.GetFiles.Query;
-
+using CopyFileRequest = PackageManager.Shared.Queries.CopyFile.Request;
 namespace PackageManager.DotNetCliModule
 {
     public class PrimaryModule : ModuleBase
@@ -102,7 +102,7 @@ namespace PackageManager.DotNetCliModule
                     //Copy startup.cs from template directory
                     var startupFilePath = $"{projectDirectory}\\Startup.cs";
                     
-                    await Mediator.Send(new Shared.Queries.CopyFile.Request { 
+                    await Mediator.Send(new CopyFileRequest { 
                         SourcePath = "Templates/Web/Startup.cs.txt",
                         DestinationPath = startupFilePath,
                         OverWriteFile = true
@@ -126,9 +126,18 @@ namespace PackageManager.DotNetCliModule
                                 FilePath = filePath.Source, 
                                 ExtensionDelimiter = ',', 
                                 Extensions = filePath.FileExtensions }, 
-                                cancellationToken);    
+                                cancellationToken);
 
-                        
+                        foreach (var file in files.Files)
+                        {
+                            var relativeFilePath = filePath.To.Concat(file.FullName.Replace(files.Directory.FullName, string.Empty));
+
+                            await Mediator.Send(new CopyFileRequest { 
+                                CreateSubDirectories = true,
+                                SourcePath = file.FullName, 
+                                DestinationPath = $"{solutionDirectory}\\{relativeFilePath}", 
+                                OverWriteFile = true }, cancellationToken);
+                        }
                     }
 
                     //webOutputs.FileExtensions.Select(a => a.Value);
