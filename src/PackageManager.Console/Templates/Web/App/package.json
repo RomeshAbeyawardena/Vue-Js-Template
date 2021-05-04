@@ -36,6 +36,8 @@
 		"v-calendar": "2.3.0",
 		"ismobilejs": "1.1.1",
 		"vuex": "2.5.0",
-		"@microsoft/signalr": "5.0.5"
+		"@microsoft/signalr": "5.0.5",
+		"popper.js": "1.16.1",
+		"@popperjs/core": "2.9.2"
 	}
 }

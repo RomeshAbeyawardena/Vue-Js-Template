@@ -10,10 +10,10 @@ namespace PackageManager.Shared
     public class ConsoleHostDispatcher : IConsoleHostDispatcher
     {
         private readonly IConfiguration configuration;
-        private readonly ILogger<ConsoleHostDispatcher> logger;
+        private readonly ILogger<IConsoleHostDispatcher> logger;
 
         public ConsoleHostDispatcher(IConfiguration configuration,
-            ILogger<ConsoleHostDispatcher> logger)
+            ILogger<IConsoleHostDispatcher> logger)
         {
             this.configuration = configuration;
             this.logger = logger;
@@ -35,9 +35,23 @@ namespace PackageManager.Shared
 
             logger.LogInformation("{0} {1}", processStartInfo.FileName, processStartInfo.Arguments);
 
-            return Process
-                .Start(processStartInfo)
+            return StartProcess(processStartInfo, cancellationToken);
+        }
+
+        private Task StartProcess(
+            ProcessStartInfo processStartInfo,
+            CancellationToken cancellationToken)
+        {
+            var process = new Process
+            {
+                StartInfo = processStartInfo
+            };
+
+            process.Start();
+
+            return process
                 .WaitForExitAsync(cancellationToken);
         }
+
     }
 }
