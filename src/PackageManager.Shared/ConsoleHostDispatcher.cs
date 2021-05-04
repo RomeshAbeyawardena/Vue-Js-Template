@@ -36,7 +36,7 @@ namespace PackageManager.Shared
             processStartInfo.RedirectStandardError = true;
             processStartInfo.RedirectStandardOutput = true;
 
-            logger.LogInformation("{0} {1}", processStartInfo.FileName, processStartInfo.Arguments);
+            logger.LogTrace("{0} {1}", processStartInfo.FileName, processStartInfo.Arguments);
 
             return StartProcess(processStartInfo, cancellationToken);
         }

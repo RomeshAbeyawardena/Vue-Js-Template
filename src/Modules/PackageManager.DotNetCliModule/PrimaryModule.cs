@@ -191,8 +191,11 @@ namespace PackageManager.DotNetCliModule
                 var projectName = $"{configuration.SolutionName}.{project}";
                 var projectPath = $"{solutionDirectory}\\{projectName}\\";
                 var projectDirectory = $"{solutionDirectory}\\{projectName}";
+
+                string type = string.Empty;
+
                 Console.Write($"{NewLine}Enter project type for {projectName}: ");
-                var type = Console.ReadLine();
+                type = Console.ReadLine();
 
                 var configureWebApplicationWithRazorandVue =
                     ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);

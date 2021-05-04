@@ -5,7 +5,43 @@
       <remove enabled="true" key="Project.Defaults" />
       <add enabled="true" key="Solution.Add" value="dotnet sln {solution.path} add {project.path}" />
       <add enabled="true" key="Project.Add" value="dotnet new {project.type} -o {solution.path}" />
-      <add enabled="true" key="Project.AddItem" value="dotnet new {project.type} -o {solution.path}" />
+      <add enabled="true" key="Project.AddItem" value="dotnet new {project.type} -o {solution.path}">
+        <type key="console" />
+        <type key="classlib" />
+        <type key="wpf" />
+        <type key="wpflib" />
+        <type key="wpfcustomcontrollib" />
+        <type key="wpfusercontrollib" />
+        <type key="winforms" />
+        <type key="winformscontrollib" />
+        <type key="winformslib" />
+        <type key="worker" />
+        <type key="mstest" />
+        <type key="nunit" />
+        <type key="nunit-test" />
+        <type key="xunit" />
+        <type key="razorcomponent" />
+        <type key="page" />
+        <type key="viewimports" />
+        <type key="viewstart" />
+        <type key="blazorserver" />
+        <type key="blazorwasm" />
+        <type key="web" />
+        <type key="mvc" />
+        <type key="webapp" />
+        <type key="angular" />
+        <type key="react" />
+        <type key="reactredux" />
+        <type key="razorclasslib" />
+        <type key="webapi" />
+        <type key="grpc" />
+        <type key="gitignore" />
+        <type key="globaljson" />
+        <type key="nugetconfig" />
+        <type key="tool-manifest" />
+        <type key="webconfig" />
+        <type key="proto" />
+      </add>
       <add enabled="true" key="Npm.Install" value="npm install" workingDirectory="{project.path}" />
       <add enabled="true" key="Yarn.Install" value="yarn" workingDirectory="{project.path}" />
     </commands>
