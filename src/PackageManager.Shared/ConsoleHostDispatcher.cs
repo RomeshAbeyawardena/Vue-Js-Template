@@ -33,6 +33,9 @@ namespace PackageManager.Shared
                 processStartInfo.WorkingDirectory = workingDirectory;
             }
 
+            processStartInfo.RedirectStandardError = true;
+            processStartInfo.RedirectStandardOutput = true;
+
             logger.LogInformation("{0} {1}", processStartInfo.FileName, processStartInfo.Arguments);
 
             return StartProcess(processStartInfo, cancellationToken);
@@ -48,10 +51,37 @@ namespace PackageManager.Shared
             };
 
             process.Start();
+            var outputTask = Task.Run(async () =>
+            {
+                process.BeginOutputReadLine();
+                process.OutputDataReceived += Process_OutputDataReceived;
+                await process.WaitForExitAsync(cancellationToken);
+            }, cancellationToken);
 
-            return process
-                .WaitForExitAsync(cancellationToken);
+            var errorTask = Task.Run(async () =>
+            {
+                process.BeginErrorReadLine();
+                process.ErrorDataReceived += Process_ErrorDataReceived;
+                await process.WaitForExitAsync(cancellationToken);
+            }, cancellationToken);
+            
+            return Task.WhenAll(outputTask, errorTask);
         }
 
+        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(e.Data))
+            {
+                logger.LogError(e.Data);
+            }
+        }
+
+        private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(e.Data))
+            {
+                logger.LogInformation(e.Data);
+            }
+        }
     }
 }
