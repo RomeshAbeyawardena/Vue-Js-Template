@@ -6,15 +6,15 @@ using PackageManager.Shared.Base;
 using PackageManager.Shared.Domain.Models;
 using PackageManager.Shared.Extensions;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GetConfigurationCommandQuery = PackageManager.Shared.Queries.GetConfigurationCommand.Query;
+using CopyFileRequest = PackageManager.Shared.Queries.CopyFile.Request;
 using DispatchConsoleHostCommandQuery = PackageManager.Shared.Queries.DispatchConsoleHostCommand.Query;
+using GetConfigurationCommandQuery = PackageManager.Shared.Queries.GetConfigurationCommand.Query;
 using GetConfigurationFilePathsQuery = PackageManager.Shared.Queries.GetConfigurationFilePaths.Query;
 using GetFilesQuery = PackageManager.Shared.Queries.GetFiles.Query;
-using CopyFileRequest = PackageManager.Shared.Queries.CopyFile.Request;
-using System.IO;
 
 namespace PackageManager.DotNetCliModule
 {
@@ -27,37 +27,40 @@ namespace PackageManager.DotNetCliModule
         private static readonly string NewLine = Environment.NewLine;
 
         private readonly IConfiguration configuration;
-        
+
         private Task<Command> GetCommandByKey(string key,
             CancellationToken cancellationToken)
         {
             return Mediator
-               .Send(new GetConfigurationCommandQuery { 
-                   Key = key, 
+               .Send(new GetConfigurationCommandQuery
+               {
+                   Key = key,
                }, cancellationToken);
         }
 
-        private Task CreateSolutionFile(Command projectAddCommand, 
-            string solutionDirectory, 
+        private Task CreateSolutionFile(Command projectAddCommand,
+            string solutionDirectory,
             CancellationToken cancellationToken)
         {
             //Create new SLN file in solution directory
             return Mediator.Send(new DispatchConsoleHostCommandQuery(a => a
                 .Add(ProjectTypeParameter, "sln")
-                .Add(SolutionPathParameter, solutionDirectory)) {
-                    Arguments = projectAddCommand.Value
-                }, cancellationToken);
+                .Add(SolutionPathParameter, solutionDirectory))
+            {
+                Arguments = projectAddCommand.Value
+            }, cancellationToken);
         }
 
         private Task CreateProject(string type,
-            string projectDirectory,  Command projectAddCommand, 
+            string projectDirectory, Command projectAddCommand,
             CancellationToken cancellationToken)
         {
             return Mediator.Send(new DispatchConsoleHostCommandQuery(a => a
                 .Add(ProjectTypeParameter, type)
-                .Add(SolutionPathParameter, projectDirectory)) {
-                    Arguments = projectAddCommand.Value
-                }, cancellationToken);
+                .Add(SolutionPathParameter, projectDirectory))
+            {
+                Arguments = projectAddCommand.Value
+            }, cancellationToken);
         }
 
         private Task AddProjectToSolution(Command solutionAddProjectCommand,
@@ -65,10 +68,11 @@ namespace PackageManager.DotNetCliModule
         {
             return Mediator.Send(new DispatchConsoleHostCommandQuery(a => a
                 .Add(ProjectPathParameter, projectPath)
-                .Add(SolutionPathParameter, 
-                        $"{solutionDirectory}\\{configuration.SolutionName}.sln")) {
-                    Arguments = solutionAddProjectCommand.Value
-                }, cancellationToken);
+                .Add(SolutionPathParameter,
+                        $"{solutionDirectory}\\{configuration.SolutionName}.sln"))
+            {
+                Arguments = solutionAddProjectCommand.Value
+            }, cancellationToken);
         }
 
         private async Task CopyStartupToWebProject(
@@ -89,7 +93,7 @@ namespace PackageManager.DotNetCliModule
             System.IO.File.WriteAllText(startupFilePath, text.Replace("{project.name}", projectName));
         }
 
-        private async Task CopyContentFilesToWebProject(string projectPath, 
+        private async Task CopyContentFilesToWebProject(string projectPath,
             CancellationToken cancellationToken)
         {
             var filePaths = await Mediator.Send(
@@ -141,13 +145,15 @@ namespace PackageManager.DotNetCliModule
             return false;
         }
 
-        private async Task RunPackageManager(Command packageManagerCommand, 
+        private async Task RunPackageManager(Command packageManagerCommand,
             string projectPath,
             CancellationToken cancellationToken)
         {
-            var configurationFile = (await Mediator.Send(new GetConfigurationFilePathsQuery { 
-                Name = "Web", 
-                RequiresPackageManager = true }, cancellationToken)).First();
+            var configurationFile = (await Mediator.Send(new GetConfigurationFilePathsQuery
+            {
+                Name = "Web",
+                RequiresPackageManager = true
+            }, cancellationToken)).First();
 
             await Mediator.Send(new DispatchConsoleHostCommandQuery
             {
@@ -188,14 +194,15 @@ namespace PackageManager.DotNetCliModule
                 Console.Write($"{NewLine}Enter project type for {projectName}: ");
                 var type = Console.ReadLine();
 
-                var configureWebApplicationWithRazorandVue = 
+                var configureWebApplicationWithRazorandVue =
                     ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
 
                 //Create project of specified type
-                await CreateProject(type, projectDirectory, projectAddCommand, cancellationToken);
+                await CreateProject(type, projectDirectory,
+                    projectAddCommand, cancellationToken);
 
                 //Add project to solution
-                await AddProjectToSolution(solutionAddProjectCommand, projectPath, 
+                await AddProjectToSolution(solutionAddProjectCommand, projectPath,
                     solutionDirectory, cancellationToken);
 
                 if (configureWebApplicationWithRazorandVue)
@@ -212,7 +219,7 @@ namespace PackageManager.DotNetCliModule
                     string commandName;
                     while (!commandNameDictionaryBuilder.TryGetValue(userSelection, out commandName))
                     {
-                        if(userSelection != default)
+                        if (userSelection != default)
                         {
                             Console.WriteLine($"{NewLine}Invalid selection.{NewLine}");
                         }

@@ -2,7 +2,7 @@
 
 namespace PackageManager.Shared.Abstractions
 {
-    public interface IDictionaryBuilder<TKey, TValue> 
+    public interface IDictionaryBuilder<TKey, TValue>
         : IReadOnlyDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>
     {
         /// <inheritdoc cref="Dictionary{TKey, TValue}.Add(TKey, TValue)"/>

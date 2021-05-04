@@ -2,9 +2,6 @@
 using PackageManager.Shared.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager.Shared
 {
@@ -12,7 +9,7 @@ namespace PackageManager.Shared
     {
         private readonly IDictionaryBuilder<string, string> dictionaryBuilder;
         private readonly IDictionary<string, string> parameterDictionary;
-        private string ReplaceValues(string value, 
+        private string ReplaceValues(string value,
             Action<IDictionaryBuilder<string, string>> builder)
         {
             builder?.Invoke(dictionaryBuilder);
@@ -53,7 +50,7 @@ namespace PackageManager.Shared
             Console.WriteLine(value);
         }
 
-        public void WriteLine(string value, 
+        public void WriteLine(string value,
             Action<IDictionaryBuilder<string, string>> builder)
         {
             WriteLine(ReplaceValues(value, builder));

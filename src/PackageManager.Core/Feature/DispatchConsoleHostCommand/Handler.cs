@@ -20,8 +20,10 @@ namespace PackageManager.Core.Feature.DispatchConsoleHostCommand
 
         public async Task<Unit> Handle(Query request, CancellationToken cancellationToken)
         {
-            var consoleHost = await mediator.Send(new Shared.Queries.GetConsoleHost.Query { 
-                Key = request.Key },
+            var consoleHost = await mediator.Send(new Shared.Queries.GetConsoleHost.Query
+            {
+                Key = request.Key
+            },
                 cancellationToken);
 
             foreach (var (key, value) in request.Parameters)
@@ -30,7 +32,7 @@ namespace PackageManager.Core.Feature.DispatchConsoleHostCommand
                 request.WorkingDirectory = request.WorkingDirectory?.Replace(key, value);
             }
 
-            await consoleHostDispatcher.Dispatch(consoleHost, request.Arguments, 
+            await consoleHostDispatcher.Dispatch(consoleHost, request.Arguments,
                 request.WorkingDirectory, cancellationToken);
 
             return Unit.Value;

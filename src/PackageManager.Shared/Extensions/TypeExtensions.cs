@@ -6,8 +6,8 @@ namespace PackageManager.Shared.Extensions
 {
     public static class TypeExtensions
     {
-        public static T Resolve<T>(this Type type, 
-            IServiceProvider serviceProvider, 
+        public static T Resolve<T>(this Type type,
+            IServiceProvider serviceProvider,
             params object[] args)
         {
             if (args.Length == 0)

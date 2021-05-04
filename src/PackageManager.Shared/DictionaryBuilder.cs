@@ -13,7 +13,7 @@ namespace PackageManager.Shared
         }
     }
 
-    public class DictionaryBuilder<TKey, TValue> 
+    public class DictionaryBuilder<TKey, TValue>
         : IDictionaryBuilder<TKey, TValue>
     {
         private readonly IDictionary<TKey, TValue> dictionary;

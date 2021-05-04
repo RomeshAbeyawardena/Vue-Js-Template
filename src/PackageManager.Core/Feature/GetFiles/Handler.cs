@@ -22,7 +22,7 @@ namespace PackageManager.Core.Feature.GetFiles
             var extensions = request.Extensions.Select(a => a.Value.Trim('*'));
 
             var directoryInfo = new DirectoryInfo(request.FilePath);
-            var files = fileProvider.GetFiles(directoryInfo, 
+            var files = fileProvider.GetFiles(directoryInfo,
                 extensions, request.ExtensionDelimiter);
 
             return Task.FromResult(new Shared.Responses.GetFiles.Response

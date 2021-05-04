@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PackageManager.Shared.Abstractions
 {
@@ -15,7 +11,7 @@ namespace PackageManager.Shared.Abstractions
         void Write(string value);
         void WriteLine(string value);
 
-        void Write(string value, 
+        void Write(string value,
             Action<IDictionaryBuilder<string, string>> builder);
         void WriteLine(string value,
             Action<IDictionaryBuilder<string, string>> builder);

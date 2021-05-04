@@ -17,14 +17,14 @@ namespace PackageManager.Shared
             this.serviceProvider = serviceProvider;
         }
 
-        public IEnumerable<IModule> GetModules( IConfiguration configuration)
+        public IEnumerable<IModule> GetModules(IConfiguration configuration)
         {
             var assemblyTypes = new List<Type>();
             foreach (var module in configuration.Modules)
             {
                 var assembly = Assembly//.Load(module.Assembly);
                     .LoadFrom($"{Path.Combine(typeof(ModuleLoader).GetLocation(), module.Assembly)}.dll");
-                
+
                 assemblyTypes.Add(
                     assembly.GetType(module.Type));
             }

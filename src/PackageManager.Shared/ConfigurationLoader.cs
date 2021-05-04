@@ -1,8 +1,8 @@
 ﻿using PackageManager.Shared.Abstractions;
+using PackageManager.Shared.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using PackageManager.Shared.Extensions;
 
 namespace PackageManager.Shared.Domain.Models
 {
@@ -54,16 +54,16 @@ namespace PackageManager.Shared.Domain.Models
 
             return list;
         }
-    
+
         private static void GetOutputs(IConfiguration configuration,
             XmlDocument xmlDocument)
         {
             const string getOutputsXPath = "/config/outputs/{0}[@enabled='true']";
-            
+
             var outputNodes = xmlDocument.SelectNodes(getOutputsXPath.Format(Action_Add));
 
             var outputList = new List<Output>();
-            
+
             foreach (XmlNode node in outputNodes)
             {
                 var output = node.GetValues<Output>();

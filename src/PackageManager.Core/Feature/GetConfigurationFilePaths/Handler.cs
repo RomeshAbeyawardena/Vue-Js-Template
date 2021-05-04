@@ -22,9 +22,9 @@ namespace PackageManager.Core.Feature.GetConfigurationFilePaths
         public Task<IEnumerable<File>> Handle(Query request, CancellationToken cancellationToken)
         {
             return Task.FromResult(configuration
-                .Outputs.FirstOrDefault(a => a.Name.Equals(request.Name, 
+                .Outputs.FirstOrDefault(a => a.Name.Equals(request.Name,
                     StringComparison.InvariantCultureIgnoreCase))
-                        .Files.Where(a => !request.RequiresPackageManager.HasValue 
+                        .Files.Where(a => !request.RequiresPackageManager.HasValue
                             || a.RequiresPackageManager == request.RequiresPackageManager.Value));
         }
     }

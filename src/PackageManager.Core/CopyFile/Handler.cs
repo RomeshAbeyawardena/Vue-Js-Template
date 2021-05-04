@@ -16,8 +16,8 @@ namespace PackageManager.Core.CopyFile
                 Directory.CreateDirectory(fileInfo.Directory.FullName);
             }
 
-            File.Copy(request.SourcePath, 
-                request.DestinationPath, 
+            File.Copy(request.SourcePath,
+                request.DestinationPath,
                 request.OverWriteFile);
 
             return Unit.Task;

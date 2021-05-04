@@ -8,7 +8,7 @@ namespace PackageManager.Shared
     {
         public Configuration(string solutionName,
             string output,
-            IEnumerable<string> projectNames, 
+            IEnumerable<string> projectNames,
             string configurationPath)
         {
             SolutionName = solutionName;

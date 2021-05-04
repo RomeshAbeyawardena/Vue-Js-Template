@@ -1,11 +1,11 @@
-﻿using SystemConsole = System.Console;
-using Utility.CommandLine;
-using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
-using System.Threading;
-using PackageManager.Shared;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PackageManager.Core.Extensions;
+using PackageManager.Shared;
+using System.Threading;
+using System.Threading.Tasks;
+using Utility.CommandLine;
+using SystemConsole = System.Console;
 
 namespace PackageManager.Console
 {

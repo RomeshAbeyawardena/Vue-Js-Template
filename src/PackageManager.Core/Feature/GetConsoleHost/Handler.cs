@@ -24,7 +24,7 @@ namespace PackageManager.Core.Feature.GetConsoleHost
         {
             return Task.FromResult(string.IsNullOrEmpty(request.Key)
                 ? consoleHostDispatcher.DefaultConsoleHost
-                : configuration.ConsoleHosts.First(a => a.Key.Equals(request.Key, 
+                : configuration.ConsoleHosts.First(a => a.Key.Equals(request.Key,
                     StringComparison.InvariantCultureIgnoreCase)));
         }
     }
