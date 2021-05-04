@@ -52,7 +52,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Modules\PackageManager.DotNetCliModule\PackageManager.DotNetCliModule.csproj" />
     <ProjectReference Include="..\PackageManager.Core\PackageManager.Core.csproj" />
     <ProjectReference Include="..\PackageManager.Shared\PackageManager.Shared.csproj" />
   </ItemGroup>
@@ -65,5 +64,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy $(TargetDir)* $(SolutionDir)\\bin /i /Y /S" />
+  </Target>
 
 </Project>

@@ -9,5 +9,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\PackageManager.Shared\PackageManager.Shared.csproj" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy $(TargetDir)* $(SolutionDir)\\bin /i /Y /S" />
+  </Target>
 
 </Project>

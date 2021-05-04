@@ -21,7 +21,7 @@ namespace PackageManager.Shared
             var assemblyTypes = new List<Type>();
             foreach (var module in configuration.Modules)
             {
-                var assembly = Assembly
+                var assembly = Assembly//.Load(module.Assembly);
                     .LoadFrom($"{module.Assembly}.dll");
                 
                 assemblyTypes.Add(
