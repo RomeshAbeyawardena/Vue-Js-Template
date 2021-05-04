@@ -19,7 +19,7 @@ namespace PackageManager.Console
         public StartupHost(Func<IServiceCollection, IServiceCollection> servicesAction)
             : this(servicesAction(new ServiceCollection()))
         {
-            
+
         }
 
         public IServiceProvider Services { get; }

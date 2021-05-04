@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Logging;
 using PackageManager.Shared.Abstractions;
 using PackageManager.Shared.Base;
+using PackageManager.Shared.Extensions;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PackageManager.Shared.Extensions;
 
 namespace PackageManager.DotNetCliModule
 {
@@ -17,8 +17,8 @@ namespace PackageManager.DotNetCliModule
         public TestModule(IConfiguration configuration,
             ISystemConsole systemConsole,
             IMediator mediator,
-            ILogger<TestModule> logger) 
-            : base(logger, systemConsole, 
+            ILogger<TestModule> logger)
+            : base(logger, systemConsole,
                    configuration, mediator)
         {
             this.logger = logger;
@@ -33,7 +33,7 @@ namespace PackageManager.DotNetCliModule
         {
             var outputs = await Mediator.Send(new Shared.Queries.GetConfigurationFilePaths.Query { Name = "Web" }, cancellationToken);
 
-            foreach(var output in outputs)
+            foreach (var output in outputs)
             {
                 logger.LogInformation("Getting files for {0}", output.Source);
                 //var extensions = string.Join(',', output.FileExtensions.Select(a => a.Value));
@@ -43,15 +43,15 @@ namespace PackageManager.DotNetCliModule
                     Extensions = output.FileExtensions,
                     FilePath = output.Source
                 });
-                
+
                 foreach (var file in files.Files)
                 {
-                    logger.LogInformation("Full Name:\t{0}\r\nDirectory Name:\t{1}", 
-                        output.To.Concat(file.FullName.Replace(files.Directory.FullName, string.Empty)), 
+                    logger.LogInformation("Full Name:\t{0}\r\nDirectory Name:\t{1}",
+                        output.To.Concat(file.FullName.Replace(files.Directory.FullName, string.Empty)),
                         files.Directory.FullName);
                 }
             }
-            
+
 
             return true;
         }

@@ -32,7 +32,7 @@ namespace PackageManager.Shared.Base
             return ValueTask.CompletedTask;
         }
 
-        public ISystemConsole Console { get;  }
+        public ISystemConsole Console { get; }
         public ILogger Logger { get; }
         public IConfiguration Configuration { get; }
         public IMediator Mediator { get; }

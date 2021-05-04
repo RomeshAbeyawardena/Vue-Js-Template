@@ -17,7 +17,7 @@ namespace PackageManager.Shared.Extensions
 
         public static string Format(this string value, IDictionary<string, string> replacementKeyValues)
         {
-            foreach(var (key, val) in replacementKeyValues)
+            foreach (var (key, val) in replacementKeyValues)
             {
                 value = value.Replace(key, val);
             }

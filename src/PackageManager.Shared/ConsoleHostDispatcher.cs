@@ -21,7 +21,7 @@ namespace PackageManager.Shared
 
         public IConsoleHost DefaultConsoleHost => configuration.ConsoleHosts.Single(a => a.Default);
 
-        public Task Dispatch(IConsoleHost consoleHost, string arguments, 
+        public Task Dispatch(IConsoleHost consoleHost, string arguments,
             string workingDirectory = default, CancellationToken cancellationToken = default)
         {
             const string consoleArgumentsParameter = "{console.arguments}";

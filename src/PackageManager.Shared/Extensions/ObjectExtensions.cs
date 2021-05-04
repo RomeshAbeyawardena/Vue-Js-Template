@@ -9,14 +9,14 @@ namespace PackageManager.Shared.Extensions
             IDictionary<string, object> dictionary,
             Type valueType = default)
         {
-            if(valueType == null)
+            if (valueType == null)
             {
                 valueType = instance.GetType();
             }
 
             foreach (var property in valueType.GetProperties())
             {
-                if(dictionary.TryGetValue(property.Name, out var value))
+                if (dictionary.TryGetValue(property.Name, out var value))
                 {
                     var propertyType = property.PropertyType;
                     if (value != null)

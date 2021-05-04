@@ -20,7 +20,7 @@ namespace PackageManager.Shared
 
         public IEnumerable<FileInfo> GetFiles(DirectoryInfo directoryInfo, IEnumerable<string> extensions, char delimiter)
         {
-            
+
             var fileList = new List<FileInfo>();
             var directories = Directory.EnumerateDirectories(directoryInfo.FullName, "*", SearchOption.AllDirectories);
             foreach (var directory in directories)

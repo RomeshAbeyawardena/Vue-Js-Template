@@ -21,7 +21,7 @@ namespace PackageManager.Core.Feature.GetConfigurationCommand
         public Task<Command> Handle(Query request, CancellationToken cancellationToken)
         {
             return Task
-                .FromResult(configuration.Commands.First(a => a.Key.Equals(request.Key, 
+                .FromResult(configuration.Commands.First(a => a.Key.Equals(request.Key,
                     StringComparison.InvariantCultureIgnoreCase)));
         }
     }
