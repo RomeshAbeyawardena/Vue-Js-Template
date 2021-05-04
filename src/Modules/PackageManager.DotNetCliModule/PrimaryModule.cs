@@ -14,6 +14,7 @@ using DispatchConsoleHostCommandQuery = PackageManager.Shared.Queries.DispatchCo
 using GetConfigurationFilePathsQuery = PackageManager.Shared.Queries.GetConfigurationFilePaths.Query;
 using GetFilesQuery = PackageManager.Shared.Queries.GetFiles.Query;
 using CopyFileRequest = PackageManager.Shared.Queries.CopyFile.Request;
+using System.IO;
 
 namespace PackageManager.DotNetCliModule
 {
@@ -22,6 +23,7 @@ namespace PackageManager.DotNetCliModule
         private const string ProjectTypeParameter = "{project.type}";
         private const string SolutionPathParameter = "{solution.path}";
         private const string ProjectPathParameter = "{project.path}";
+        private readonly Type PrimaryModuleType = typeof(PrimaryModule);
         private static readonly string NewLine = Environment.NewLine;
 
         private readonly IConfiguration configuration;
@@ -77,7 +79,7 @@ namespace PackageManager.DotNetCliModule
 
             await Mediator.Send(new CopyFileRequest
             {
-                SourcePath = "Templates/Web/Startup.cs.txt",
+                SourcePath = Path.Combine(PrimaryModuleType.GetLocation(), "Templates/Web/Startup.cs.txt"),
                 DestinationPath = startupFilePath,
                 OverWriteFile = true
             }, cancellationToken);
@@ -102,11 +104,10 @@ namespace PackageManager.DotNetCliModule
                 var files = await Mediator
                     .Send(new GetFilesQuery
                     {
-                        FilePath = filePath.Source,
+                        FilePath = Path.Combine(PrimaryModuleType.GetLocation(), filePath.Source),
                         ExtensionDelimiter = ',',
                         Extensions = filePath.FileExtensions
-                    },
-                        cancellationToken);
+                    }, cancellationToken);
 
                 foreach (var file in files.Files)
                 {

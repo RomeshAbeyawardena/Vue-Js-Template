@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace PackageManager.Shared.Extensions
@@ -18,6 +19,13 @@ namespace PackageManager.Shared.Extensions
             }
 
             return (T)Activator.CreateInstance(type, args);
+        }
+
+        public static string GetLocation(this Type type)
+        {
+            var fileInfo = new FileInfo(type.Assembly.Location);
+
+            return fileInfo.DirectoryName;
         }
     }
 }

@@ -2,6 +2,7 @@
 using PackageManager.Shared.Extensions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -22,7 +23,7 @@ namespace PackageManager.Shared
             foreach (var module in configuration.Modules)
             {
                 var assembly = Assembly//.Load(module.Assembly);
-                    .LoadFrom($"{module.Assembly}.dll");
+                    .LoadFrom($"{Path.Combine(typeof(ModuleLoader).GetLocation(), module.Assembly)}.dll");
                 
                 assemblyTypes.Add(
                     assembly.GetType(module.Type));

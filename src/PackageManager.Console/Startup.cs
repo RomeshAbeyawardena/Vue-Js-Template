@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using PackageManager.Shared.Abstractions;
+using PackageManager.Shared.Extensions;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,12 +9,12 @@ namespace PackageManager.Console
 {
     public class Startup : IStartup
     {
-        private readonly Shared.Abstractions.IConfiguration configuration;
+        private readonly IConfiguration configuration;
         private readonly IConfigurationLoader configurationLoader;
         private readonly IModuleLoader moduleLoader;
         private readonly ILogger<Startup> logger;
         private IModule currentModule;
-        public Startup(Shared.Abstractions.IConfiguration configuration,
+        public Startup(IConfiguration configuration,
             IConfigurationLoader configurationLoader,
             IModuleLoader moduleLoader,
             ILogger<Startup> logger)
@@ -31,7 +33,7 @@ namespace PackageManager.Console
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             configurationLoader
-                .LoadConfigurationFromXml(configuration, "config.xml");
+                .LoadConfigurationFromXml(configuration, Path.Combine(typeof(Startup).GetLocation(), "config.xml"));
 
             logger.LogInformation("Added configuration from config.xml");
 
