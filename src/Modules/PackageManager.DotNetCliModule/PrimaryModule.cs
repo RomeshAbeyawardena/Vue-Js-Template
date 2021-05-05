@@ -192,11 +192,12 @@ namespace PackageManager.DotNetCliModule
                 var projectPath = $"{solutionDirectory}\\{projectName}\\";
                 var projectDirectory = $"{solutionDirectory}\\{projectName}";
 
-                string type = string.Empty;
-
-                Console.Write($"{NewLine}Enter project type for {projectName}: ");
-                type = Console.ReadLine();
-
+                string type =  await ConsoleInputErrorLoopHandler.Begin(prompt: () => 
+                    Console.WriteLine($"{NewLine}Enter project type for {projectName}: "),
+                    handler: (strInput) => projectAddCommand.Types
+                            .Any(a => a.Key.Equals(strInput, StringComparison.InvariantCultureIgnoreCase)),
+                    failedAttemptHandler: (strInput) => Console.WriteErrorLine("Invalid type"));
+                
                 var configureWebApplicationWithRazorandVue =
                     ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
 

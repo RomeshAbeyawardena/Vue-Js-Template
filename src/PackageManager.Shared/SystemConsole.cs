@@ -60,5 +60,25 @@ namespace PackageManager.Shared
         {
             parameterDictionary.Clear();
         }
+
+        public void WriteError(string error)
+        {
+            Console.Error.Write(error);
+        }
+
+        public void WriteErrorLine(string error)
+        {
+            Console.Error.WriteLine(error);
+        }
+
+        public void WriteError(string value, Action<IDictionaryBuilder<string, string>> builder)
+        {
+            WriteError(ReplaceValues(value, builder));
+        }
+
+        public void WriteErrorLine(string value, Action<IDictionaryBuilder<string, string>> builder)
+        {
+            WriteErrorLine(ReplaceValues(value, builder));
+        }
     }
 }

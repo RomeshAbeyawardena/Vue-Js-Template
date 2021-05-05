@@ -1,4 +1,6 @@
-﻿namespace PackageManager.Shared.Domain.Models
+﻿using System.Collections.Generic;
+
+namespace PackageManager.Shared.Domain.Models
 {
     public class Command
     {
@@ -11,5 +13,7 @@
         public string Value { get; set; }
 
         public string WorkingDirectory { get; set; }
+
+        public IEnumerable<CommandType> Types { get; set; }
     }
 }

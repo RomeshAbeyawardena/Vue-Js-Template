@@ -5,41 +5,41 @@
       <remove enabled="true" key="Project.Defaults" />
       <add enabled="true" key="Solution.Add" value="dotnet sln {solution.path} add {project.path}" />
       <add enabled="true" key="Project.Add" value="dotnet new {project.type} -o {solution.path}">
-        <type key="console" />
-        <type key="classlib" />
-        <type key="wpf" />
-        <type key="wpflib" />
-        <type key="wpfcustomcontrollib" />
-        <type key="wpfusercontrollib" />
-        <type key="winforms" />
-        <type key="winformscontrollib" />
-        <type key="winformslib" />
-        <type key="worker" />
-        <type key="mstest" />
-        <type key="nunit" />
-        <type key="nunit-test" />
-        <type key="xunit" />
-        <type key="razorcomponent" />
-        <type key="page" />
-        <type key="viewimports" />
-        <type key="viewstart" />
-        <type key="blazorserver" />
-        <type key="blazorwasm" />
-        <type key="web" />
-        <type key="mvc" />
-        <type key="webapp" />
-        <type key="angular" />
-        <type key="react" />
-        <type key="reactredux" />
-        <type key="razorclasslib" />
-        <type key="webapi" />
-        <type key="grpc" />
-        <type key="gitignore" />
-        <type key="globaljson" />
-        <type key="nugetconfig" />
-        <type key="tool-manifest" />
-        <type key="webconfig" />
-        <type key="proto" />
+        <type enabled="true" key="console" />
+        <type enabled="true" key="classlib" />
+        <type enabled="true" key="wpf" />
+        <type enabled="true" key="wpflib" />
+        <type enabled="true" key="wpfcustomcontrollib" />
+        <type enabled="true" key="wpfusercontrollib" />
+        <type enabled="true" key="winforms" />
+        <type enabled="true" key="winformscontrollib" />
+        <type enabled="true" key="winformslib" />
+        <type enabled="true" key="worker" />
+        <type enabled="true" key="mstest" />
+        <type enabled="true" key="nunit" />
+        <type enabled="true" key="nunit-test" />
+        <type enabled="true" key="xunit" />
+        <type enabled="true" key="razorcomponent" />
+        <type enabled="true" key="page" />
+        <type enabled="true" key="viewimports" />
+        <type enabled="true" key="viewstart" />
+        <type enabled="true" key="blazorserver" />
+        <type enabled="true" key="blazorwasm" />
+        <type enabled="true" key="web" />
+        <type enabled="true" key="mvc" />
+        <type enabled="true" key="webapp" />
+        <type enabled="true" key="angular" />
+        <type enabled="true" key="react" />
+        <type enabled="true" key="reactredux" />
+        <type enabled="true" key="razorclasslib" />
+        <type enabled="true" key="webapi" />
+        <type enabled="true" key="grpc" />
+        <type enabled="true" key="gitignore" />
+        <type enabled="true" key="globaljson" />
+        <type enabled="true" key="nugetconfig" />
+        <type enabled="true" key="tool-manifest" />
+        <type enabled="true" key="webconfig" />
+        <type enabled="true" key="proto" />
       </add>
       <add enabled="true" key="Npm.Install" value="npm install" workingDirectory="{project.path}" />
       <add enabled="true" key="Yarn.Install" value="yarn" workingDirectory="{project.path}" />

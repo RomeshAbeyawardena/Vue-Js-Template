@@ -49,10 +49,31 @@ namespace PackageManager.Shared.Domain.Models
             {
                 var command = node.GetValues<Command>();
                 command.Action = action;
+                command.Types = GetCommandTypes(node);
                 list.Add(command);
             }
 
             return list;
+        }
+
+        private static IEnumerable<CommandType> GetCommandTypes(XmlNode xmlNode)
+        {
+            var commandTypeList = new List<CommandType>();
+
+            if (xmlNode.ChildNodes.Count == 0)
+            {
+                return commandTypeList;
+            }
+
+            var commandTypeNodes = xmlNode.SelectNodes("type[@enabled='true']");
+
+            foreach (XmlNode node in commandTypeNodes)
+            {
+                commandTypeList.Add(node
+                    .GetValues<CommandType>());
+            }
+
+            return commandTypeList;
         }
 
         private static void GetOutputs(IConfiguration configuration,
