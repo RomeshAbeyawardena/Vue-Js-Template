@@ -11,32 +11,54 @@ namespace PackageManager.Shared
     {
         public static Task GetTask(Action action)
         {
+            if (action == null)
+            {
+                return Task.CompletedTask;
+            }
+
             return Task.Run(action);
         }
 
         public static Task<TResult> GetTask<TResult>(Func<TResult> action)
         {
+            if(action == null)
+            {
+                return Task.FromResult(default(TResult));
+            }
+
             return Task.Run(action);
         }
 
         public static Task<TResult> GetTask<T, TResult>(Func<T, TResult> action, T parameter)
         {
-            return Task.Run(() => action(parameter));
+            if(action == null)
+            {
+                return Task.FromResult(default(TResult));
+            }
+
+            return Task.Run(() => action.Invoke(parameter) );
         }
 
         public static Task GetTask<TParameter>(Action<TParameter> action, TParameter parameter)
         {
-            return Task.Run(() => action(parameter));
+            if (action == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return Task.Run(() => action?.Invoke(parameter));
         }
 
-        public static Task _(this Func<Task> value, Action replacement)
+        public static Task Invoke(this Func<Task> value, Action replacement)
         {
-            var promptTask = value?.Invoke() ?? GetTask(replacement);
+            var promptTask = value?.Invoke() 
+                ?? GetTask(replacement)
+                ?? Task.CompletedTask;
 
             return promptTask;
         }
 
-        public static Task<TResult> _<TResult>(this Func<Task<TResult>> value, Func<TResult> replacement)
+        public static Task<TResult> Invoke<TResult>(this Func<Task<TResult>> value, Func<TResult> replacement)
         {
             var promptTask = value?.Invoke() 
                 ?? GetTask(replacement)
@@ -45,7 +67,7 @@ namespace PackageManager.Shared
             return promptTask;
         }
 
-        public static Task<TResult> _<TParameter, TResult>(this Func<TParameter, Task<TResult>> value, TParameter parameter, Func<TParameter, TResult> replacement)
+        public static Task<TResult> Invoke<TParameter, TResult>(this Func<TParameter, Task<TResult>> value, TParameter parameter, Func<TParameter, TResult> replacement)
         {
             var promptTask = value?.Invoke(parameter) 
                 ?? GetTask(replacement, parameter) 
@@ -54,7 +76,7 @@ namespace PackageManager.Shared
             return promptTask;
         }
 
-        public static Task _<TParameter>(this Func<TParameter, Task> value, TParameter parameter, Action<TParameter> replacement)
+        public static Task Invoke<TParameter>(this Func<TParameter, Task> value, TParameter parameter, Action<TParameter> replacement)
         {
             var promptTask = value?.Invoke(parameter) 
                 ?? GetTask(replacement, parameter) ?? Task.CompletedTask;
@@ -89,25 +111,25 @@ namespace PackageManager.Shared
             {
                 if(attempts == 0)
                 {
-                    onInitialHandlerAsync?._(onInitialHandler);
+                    onInitialHandlerAsync?.Invoke(onInitialHandler);
                 }
 
-                await promptAsync._(prompt);
+                await promptAsync.Invoke(prompt);
 
                 lastInput = Console.ReadLine();
 
-                if (await handlerAsync._(lastInput, handler))
+                if (await handlerAsync.Invoke(lastInput, handler))
                 {
                     successful = true;
                     break;
                 }
                 else
                 {
-                    await failedAttemptHandlerAsync._(lastInput, failedAttemptHandler);
+                    await failedAttemptHandlerAsync.Invoke(lastInput, failedAttemptHandler);
                 }
             }
 
-            await onFinalHandlerAsync._(successful, onFinalHandler);
+            await onFinalHandlerAsync.Invoke(successful, onFinalHandler);
             return lastInput;
         }
 

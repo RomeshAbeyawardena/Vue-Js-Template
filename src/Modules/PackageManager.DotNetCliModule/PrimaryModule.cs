@@ -192,11 +192,13 @@ namespace PackageManager.DotNetCliModule
                 var projectPath = $"{solutionDirectory}\\{projectName}\\";
                 var projectDirectory = $"{solutionDirectory}\\{projectName}";
 
-                string type =  await ConsoleInputErrorLoopHandler.Begin(prompt: () => 
-                    Console.WriteLine($"{NewLine}Enter project type for {projectName}: "),
-                    handler: (strInput) => projectAddCommand.Types
-                            .Any(a => a.Key.Equals(strInput, StringComparison.InvariantCultureIgnoreCase)),
-                    failedAttemptHandler: (strInput) => Console.WriteErrorLine("Invalid type"));
+                string type =  await ConsoleInputErrorLoopHandler
+                        .Begin(prompt: () => 
+                            Console.WriteLine($"{NewLine}Enter project type for {projectName}: "),
+                            handler: (strInput) => projectAddCommand.Types
+                                .Any(a => a.Key.Equals(strInput, StringComparison.InvariantCultureIgnoreCase)),
+                            failedAttemptHandler: (strInput) => Console.WriteErrorLine("Invalid type selected."),
+                            onFinalHandler: (success) => Logger.LogTrace($"Is accepted: {success}"));
                 
                 var configureWebApplicationWithRazorandVue =
                     ProcessUserPromptToCopyWebRazorAndVueContentFiles(type, projectName);
@@ -220,20 +222,17 @@ namespace PackageManager.DotNetCliModule
                     var commandNameDictionaryBuilder = DictionaryBuilder.Create<char, string>()
                         .Add('1', "Npm.Install")
                         .Add('2', "Yarn.Install");
-                    string commandName;
-                    while (!commandNameDictionaryBuilder.TryGetValue(userSelection, out commandName))
-                    {
-                        if (userSelection != default)
-                        {
-                            Console.WriteLine($"{NewLine}Invalid selection.{NewLine}");
-                        }
+                    string commandName = string.Empty;
 
+                    await ConsoleInputErrorLoopHandler.Begin(prompt: () => {
                         Console.WriteLine("Which package manager should be used for client files?");
                         Console.Write($"\t 1. NPM{NewLine}" +
                             $"\t2. Yarn{NewLine}{NewLine}Please select:\t");
                         userSelection = Console.Read().KeyChar;
-                    }
-
+                    }, 
+                    handler: input => commandNameDictionaryBuilder.TryGetValue((userSelection = Console.Read().KeyChar), out commandName),
+                    failedAttemptHandler: input => Console.WriteLine($"{NewLine}Invalid selection.{NewLine}"));
+                    
                     var packageManagerCommand = await GetCommandByKey(commandName, cancellationToken);
 
                     await RunPackageManager(packageManagerCommand, projectPath, cancellationToken);
