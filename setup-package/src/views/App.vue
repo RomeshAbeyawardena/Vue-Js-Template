@@ -1,0 +1,14 @@
+<template>
+    <div>{{ message }}</div>
+</template>
+<script type="text/javascript">
+    import Vue from 'vue';
+
+    export default Vue.extend({
+        data: function () {
+            return {
+                message: "Hello World"
+            }
+        }
+    });
+</script>

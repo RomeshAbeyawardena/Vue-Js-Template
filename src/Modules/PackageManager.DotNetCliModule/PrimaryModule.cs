@@ -230,7 +230,7 @@ namespace PackageManager.DotNetCliModule
                             $"\t2. Yarn{NewLine}{NewLine}Please select:\t");
                         userSelection = Console.Read().KeyChar;
                     }, 
-                    handler: input => commandNameDictionaryBuilder.TryGetValue((userSelection = Console.Read().KeyChar), out commandName),
+                    handler: input => commandNameDictionaryBuilder.TryGetValue(userSelection, out commandName),
                     failedAttemptHandler: input => Console.WriteLine($"{NewLine}Invalid selection.{NewLine}"));
                     
                     var packageManagerCommand = await GetCommandByKey(commandName, cancellationToken);
